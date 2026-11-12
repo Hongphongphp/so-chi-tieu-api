@@ -25,6 +25,10 @@ public class User {
     @Column(nullable = false)
     private long monthlyBudget = 0;
 
+    /** Mục tiêu thu nhập thực nhận mỗi tháng, đơn vị KRW. 0 = chưa đặt. */
+    @Column(nullable = false, columnDefinition = "bigint default 0")
+    private long monthlyIncomeGoal = 0;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
@@ -42,8 +46,10 @@ public class User {
     public String getPasswordHash() { return passwordHash; }
     public String getDisplayName() { return displayName; }
     public long getMonthlyBudget() { return monthlyBudget; }
+    public long getMonthlyIncomeGoal() { return monthlyIncomeGoal; }
     public Instant getCreatedAt() { return createdAt; }
 
     public void setMonthlyBudget(long monthlyBudget) { this.monthlyBudget = monthlyBudget; }
+    public void setMonthlyIncomeGoal(long monthlyIncomeGoal) { this.monthlyIncomeGoal = monthlyIncomeGoal; }
     public void setDisplayName(String displayName) { this.displayName = displayName; }
 }

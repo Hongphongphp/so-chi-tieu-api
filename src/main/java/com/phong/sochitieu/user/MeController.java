@@ -2,6 +2,7 @@ package com.phong.sochitieu.user;
 
 import com.phong.sochitieu.common.ApiException;
 import com.phong.sochitieu.user.UserDtos.BudgetRequest;
+import com.phong.sochitieu.user.UserDtos.GoalRequest;
 import com.phong.sochitieu.user.UserDtos.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,16 @@ public class MeController {
         User user = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản"));
         user.setMonthlyBudget(request.monthlyBudget());
+        return UserResponse.from(user);
+    }
+
+    @PutMapping("/goal")
+    @Transactional
+    public UserResponse updateGoal(@AuthenticationPrincipal User principal,
+                                   @Valid @RequestBody GoalRequest request) {
+        User user = userRepository.findById(principal.getId())
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản"));
+        user.setMonthlyIncomeGoal(request.monthlyIncomeGoal());
         return UserResponse.from(user);
     }
 }

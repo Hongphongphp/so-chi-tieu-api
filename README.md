@@ -39,6 +39,7 @@ Mọi API trừ `/api/auth/**` cần header `Authorization: Bearer <token>`.
 | POST | `/api/auth/login` | Đăng nhập, trả token |
 | GET | `/api/me` | Thông tin tài khoản |
 | PUT | `/api/me/budget` | Đặt ngân sách tháng |
+| PUT | `/api/me/goal` | Đặt mục tiêu thu nhập thực nhận tháng `{ "monthlyIncomeGoal": 2500000 }` |
 | GET | `/api/transactions?month=2026-11` | Khoản thu chi trong tháng |
 | POST | `/api/transactions` | Thêm khoản |
 | PUT | `/api/transactions/{id}` | Sửa khoản |
@@ -46,6 +47,8 @@ Mọi API trừ `/api/auth/**` cần header `Authorization: Bearer <token>`.
 | GET | `/api/summary?month=2026-11` | Tổng kết tháng |
 
 Bỏ trống `month` thì lấy tháng hiện tại theo giờ Hàn Quốc.
+
+Khoản thu (`INCOME`) có thể kèm `cost`: chi phí đi kèm (xăng xe, phí nền tảng...). API trả về `net` = `amount - cost` là số tiền thực nhận. Tổng kết tháng có thêm `incomeCost`, `netIncome`, `incomeGoal`, `goalPercent`, `goalRemaining`; `balance` = `netIncome - expense`.
 
 Ví dụ kết quả `/api/summary`:
 

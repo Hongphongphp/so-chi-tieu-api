@@ -31,17 +31,25 @@ public class TransactionService {
 
     @Transactional
     public TransactionResponse create(Long userId, TransactionRequest req) {
+        checkCost(req);
         User userRef = userRepository.getReferenceById(userId);
         Transaction saved = transactionRepository.save(new Transaction(
-                userRef, req.type(), req.amount(), req.category().trim(), req.date(), clean(req.memo())));
+                userRef, req.type(), req.amount(), req.costOrZero(), req.category().trim(), req.date(), clean(req.memo())));
         return TransactionResponse.from(saved);
     }
 
     @Transactional
     public TransactionResponse update(Long userId, Long id, TransactionRequest req) {
+        checkCost(req);
         Transaction tx = findOwned(userId, id);
-        tx.update(req.type(), req.amount(), req.category().trim(), req.date(), clean(req.memo()));
+        tx.update(req.type(), req.amount(), req.costOrZero(), req.category().trim(), req.date(), clean(req.memo()));
         return TransactionResponse.from(tx);
+    }
+
+    private static void checkCost(TransactionRequest req) {
+        if (req.type() == TransactionType.INCOME && req.costOrZero() > req.amount()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Chi phí đi kèm không được lớn hơn tổng thu");
+        }
     }
 
     @Transactional

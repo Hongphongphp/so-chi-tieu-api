@@ -6,13 +6,31 @@
   },
   "auth": {
     "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8080" },
-    { "key": "token", "value": "" },
-    { "key": "month", "value": "2026-11" },
-    { "key": "txId", "value": "1" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "month",
+      "value": "2026-11"
+    },
+    {
+      "key": "txId",
+      "value": "1"
+    }
   ],
   "item": [
     {
@@ -20,58 +38,182 @@
       "item": [
         {
           "name": "Đăng ký",
-          "event": [{
-            "listen": "test",
-            "script": { "type": "text/javascript", "exec": [
-              "if (pm.response.code === 201) {",
-              "  pm.collectionVariables.set('token', pm.response.json().token);",
-              "  console.log('Đã lưu token');",
-              "}",
-              "pm.test('Đăng ký thành công (201)', () => pm.response.to.have.status(201));"
-            ] }
-          }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('token', pm.response.json().token);",
+                  "  console.log('Đã lưu token');",
+                  "}",
+                  "pm.test('Đăng ký thành công (201)', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] },
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"phong@example.com\",\n  \"password\": \"matkhau123\",\n  \"displayName\": \"Phong\"\n}", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"phong@example.com\",\n  \"password\": \"matkhau123\",\n  \"displayName\": \"Phong\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         },
         {
           "name": "Đăng nhập",
-          "event": [{
-            "listen": "test",
-            "script": { "type": "text/javascript", "exec": [
-              "if (pm.response.code === 200) {",
-              "  pm.collectionVariables.set('token', pm.response.json().token);",
-              "  console.log('Đã lưu token');",
-              "}",
-              "pm.test('Đăng nhập thành công (200)', () => pm.response.to.have.status(200));"
-            ] }
-          }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('token', pm.response.json().token);",
+                  "  console.log('Đã lưu token');",
+                  "}",
+                  "pm.test('Đăng nhập thành công (200)', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"phong@example.com\",\n  \"password\": \"matkhau123\"\n}", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"phong@example.com\",\n  \"password\": \"matkhau123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         },
         {
           "name": "Thông tin tài khoản",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/api/me", "host": ["{{baseUrl}}"], "path": ["api", "me"] }
+            "url": {
+              "raw": "{{baseUrl}}/api/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ]
+            }
           }
         },
         {
           "name": "Đặt ngân sách tháng",
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/me/budget", "host": ["{{baseUrl}}"], "path": ["api", "me", "budget"] },
-            "body": { "mode": "raw", "raw": "{ \"monthlyBudget\": 1000000 }", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/me/budget",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me",
+                "budget"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"monthlyBudget\": 1000000 }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Đặt mục tiêu thu nhập tháng",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/me/goal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me",
+                "goal"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"monthlyIncomeGoal\": 2500000 }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         }
       ]
@@ -83,47 +225,144 @@
           "name": "Danh sách trong tháng",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/api/transactions?month={{month}}", "host": ["{{baseUrl}}"], "path": ["api", "transactions"], "query": [{ "key": "month", "value": "{{month}}" }] }
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions?month={{month}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "{{month}}"
+                }
+              ]
+            }
           }
         },
         {
           "name": "Thêm khoản chi",
-          "event": [{
-            "listen": "test",
-            "script": { "type": "text/javascript", "exec": [
-              "if (pm.response.code === 201) pm.collectionVariables.set('txId', pm.response.json().id);"
-            ] }
-          }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('txId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/transactions", "host": ["{{baseUrl}}"], "path": ["api", "transactions"] },
-            "body": { "mode": "raw", "raw": "{\n  \"type\": \"EXPENSE\",\n  \"amount\": 9500,\n  \"category\": \"Ăn uống\",\n  \"date\": \"2026-11-12\",\n  \"memo\": \"Cơm căng tin\"\n}", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXPENSE\",\n  \"amount\": 9500,\n  \"category\": \"Ăn uống\",\n  \"date\": \"2026-11-12\",\n  \"memo\": \"Cơm căng tin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         },
         {
-          "name": "Thêm khoản thu",
+          "name": "Thêm khoản thu (có chi phí đi kèm)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/transactions", "host": ["{{baseUrl}}"], "path": ["api", "transactions"] },
-            "body": { "mode": "raw", "raw": "{\n  \"type\": \"INCOME\",\n  \"amount\": 1450000,\n  \"category\": \"Lương làm thêm\",\n  \"date\": \"2026-11-01\",\n  \"memo\": \"Lương giao hàng\"\n}", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"INCOME\",\n  \"amount\": 128000,\n  \"cost\": 9000,\n  \"category\": \"Chạy xe / giao hàng\",\n  \"date\": \"2026-11-12\",\n  \"memo\": \"Chạy xe\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         },
         {
           "name": "Sửa khoản",
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": { "raw": "{{baseUrl}}/api/transactions/{{txId}}", "host": ["{{baseUrl}}"], "path": ["api", "transactions", "{{txId}}"] },
-            "body": { "mode": "raw", "raw": "{\n  \"type\": \"EXPENSE\",\n  \"amount\": 12000,\n  \"category\": \"Ăn uống\",\n  \"date\": \"2026-11-12\",\n  \"memo\": \"Cơm + nước\"\n}", "options": { "raw": { "language": "json" } } }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{txId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "{{txId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXPENSE\",\n  \"amount\": 12000,\n  \"category\": \"Ăn uống\",\n  \"date\": \"2026-11-12\",\n  \"memo\": \"Cơm + nước\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
         },
         {
           "name": "Xóa khoản",
           "request": {
             "method": "DELETE",
-            "url": { "raw": "{{baseUrl}}/api/transactions/{{txId}}", "host": ["{{baseUrl}}"], "path": ["api", "transactions", "{{txId}}"] }
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{txId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "{{txId}}"
+              ]
+            }
           }
         }
       ]
@@ -135,7 +374,22 @@
           "name": "Tổng kết tháng",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/api/summary?month={{month}}", "host": ["{{baseUrl}}"], "path": ["api", "summary"], "query": [{ "key": "month", "value": "{{month}}" }] }
+            "url": {
+              "raw": "{{baseUrl}}/api/summary?month={{month}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "{{month}}"
+                }
+              ]
+            }
           }
         }
       ]

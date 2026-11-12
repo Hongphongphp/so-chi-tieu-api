@@ -25,11 +25,17 @@ public class SummaryController {
 
     /**
      * Tổng kết một tháng.
-     * dailyLimit: số tiền có thể tiêu mỗi ngày còn lại để không vượt ngân sách
-     * (chỉ tính cho tháng hiện tại và khi đã đặt ngân sách).
+     * income       : tổng thu (chưa trừ chi phí đi kèm)
+     * incomeCost   : tổng chi phí đi kèm các khoản thu (xăng xe, phí nền tảng...)
+     * netIncome    : thu nhập thực nhận = income - incomeCost
+     * expense      : tổng các khoản chi
+     * balance      : còn lại = netIncome - expense
+     * incomeGoal / goalPercent / goalRemaining: mục tiêu thực nhận tháng và tiến độ
+     * dailyLimit   : số tiền có thể tiêu mỗi ngày còn lại để không vượt ngân sách (chỉ tháng hiện tại)
      */
-    public record MonthlySummary(String month, long income, long expense, long balance,
+    public record MonthlySummary(String month, long income, long incomeCost, long netIncome, long expense, long balance,
                                  long budget, Integer budgetUsedPercent, Integer daysLeft, Long dailyLimit,
+                                 long incomeGoal, Integer goalPercent, Long goalRemaining,
                                  List<CategoryTotal> expenseByCategory) {
     }
 
@@ -47,8 +53,12 @@ public class SummaryController {
         YearMonth ym = monthParam.parse(month);
         List<Transaction> items = transactionService.findByMonth(user.getId(), ym);
 
-        long income = sum(items, TransactionType.INCOME);
-        long expense = sum(items, TransactionType.EXPENSE);
+        List<Transaction> incomes = items.stream().filter(t -> t.getType() == TransactionType.INCOME).toList();
+        long income = incomes.stream().mapToLong(Transaction::getAmount).sum();
+        long incomeCost = incomes.stream().mapToLong(Transaction::getCost).sum();
+        long netIncome = income - incomeCost;
+        long expense = items.stream().filter(t -> t.getType() == TransactionType.EXPENSE)
+                .mapToLong(Transaction::getAmount).sum();
 
         Map<String, Long> byCat = items.stream()
                 .filter(t -> t.getType() == TransactionType.EXPENSE)
@@ -71,12 +81,12 @@ public class SummaryController {
             }
         }
 
-        return new MonthlySummary(ym.toString(), income, expense, income - expense,
-                budget, usedPercent, daysLeft, dailyLimit, categories);
-    }
+        long goal = user.getMonthlyIncomeGoal();
+        Integer goalPercent = goal > 0 ? (int) Math.round(Math.max(0, netIncome) * 100.0 / goal) : null;
+        Long goalRemaining = goal > 0 ? Math.max(0, goal - netIncome) : null;
 
-    private static long sum(List<Transaction> items, TransactionType type) {
-        return items.stream().filter(t -> t.getType() == type).mapToLong(Transaction::getAmount).sum();
+        return new MonthlySummary(ym.toString(), income, incomeCost, netIncome, expense, netIncome - expense,
+                budget, usedPercent, daysLeft, dailyLimit, goal, goalPercent, goalRemaining, categories);
     }
 
     private static double round1(double v) {
