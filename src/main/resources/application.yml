@@ -1,0 +1,25 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: so-chi-tieu-api
+  datasource:
+    # File H2 nằm trong thư mục ./data, tắt app dữ liệu vẫn còn
+    url: jdbc:h2:file:./data/sochitieu;MODE=PostgreSQL
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    # Chỉ dùng khi chạy trên máy. Khi deploy, đặt biến môi trường JWT_SECRET (base64, tối thiểu 32 byte)
+    secret: ${JWT_SECRET:c28tY2hpLXRpZXUtZGV2LXNlY3JldC1rZXktb25seS1mb3ItbG9jYWwtMzJieXRlcw==}
+    expiration-ms: 604800000 # 7 ngày
+  timezone: Asia/Seoul

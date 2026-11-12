@@ -1,0 +1,6 @@
+# Chạy với: mvn spring-boot:run -Dspring-boot.run.profiles=postgres
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/sochitieu}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}

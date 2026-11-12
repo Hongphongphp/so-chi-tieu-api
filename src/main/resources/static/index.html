@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sổ Chi Tiêu Du Học</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --line:#dde3e0; --fg:#18231f; --muted:#5f6d68;
+  --accent:#0f6b5c; --accent-soft:#e1efeb; --income:#1d7a3e; --expense:#b23a2e; --warn:#b7791f;
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#111816; --surface:#19221f; --line:#2b3632; --fg:#e7eeeb; --muted:#94a39e;
+  --accent:#4cc3ab; --accent-soft:#1d332e; --income:#5cc97f; --expense:#f0806f; --warn:#e3b04f; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.5;padding:20px 16px 48px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-size:1.35rem;margin:0;font-weight:700}
+h2{font-size:.78rem;margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.month{display:flex;align-items:center;gap:6px}
+button,input,select{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.link{border:0;background:none;color:var(--accent);cursor:pointer;padding:0;font-weight:600}
+.summary{background:var(--accent-soft);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.balance{font-size:1.9rem;font-weight:700}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lbl{font-size:.8rem;color:var(--muted)}
+.inc{color:var(--income)} .exp{color:var(--expense)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--accent);border-radius:4px;transition:width .3s}
+.bar.over>i{background:var(--expense)} .bar.near>i{background:var(--warn)}
+.note{font-size:.82rem;color:var(--muted)}
+section,.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+form .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+input,select{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;width:100%}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:transparent;padding:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg);font-weight:600}
+.cats{display:flex;flex-direction:column;gap:10px}
+.cat{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.cat .bar{grid-column:1/-1;height:6px}
+ul{list-style:none;margin:0;padding:0}
+li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+li:first-child{border-top:0}
+.t{min-width:0} .t b{font-weight:500;display:block;overflow-wrap:anywhere}
+.del{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:4px 6px;border-radius:6px}
+.del:hover{color:var(--expense)}
+.empty{color:var(--muted);font-size:.9rem;padding:8px 0}
+.error{color:var(--expense);font-size:.85rem;min-height:1.2em}
+.auth{max-width:380px;margin:8vh auto 0}
+.auth form{grid-template-columns:1fr}
+.user{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted)}
+@media (max-width:420px){form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ĐĂNG NHẬP / ĐĂNG KÝ -->
+<div class="wrap auth" id="authView" hidden>
+  <h1>Sổ Chi Tiêu Du Học</h1>
+  <div class="card">
+    <h2 id="authTitle">Đăng nhập</h2>
+    <form id="authForm" novalidate>
+      <div class="field" id="nameField" hidden><label class="lbl" for="displayName">Tên hiển thị</label>
+        <input id="displayName" maxlength="60" autocomplete="nickname"></div>
+      <div class="field"><label class="lbl" for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label class="lbl" for="password">Mật khẩu</label>
+        <input id="password" type="password" minlength="6" autocomplete="current-password" required></div>
+      <div class="error" id="authError"></div>
+      <button class="btn primary" type="submit" id="authSubmit">Đăng nhập</button>
+    </form>
+    <p class="note" style="margin:12px 0 0"><span id="switchText">Chưa có tài khoản?</span>
+      <button class="link" id="switchMode" type="button">Đăng ký</button></p>
+  </div>
+</div>
+
+<!-- APP CHÍNH -->
+<div class="wrap" id="appView" hidden>
+  <header>
+    <h1>Sổ Chi Tiêu Du Học</h1>
+    <div class="month">
+      <button class="btn" id="prev" aria-label="Tháng trước">‹</button>
+      <strong id="monthLabel" class="num">—</strong>
+      <button class="btn" id="next" aria-label="Tháng sau">›</button>
+    </div>
+  </header>
+  <div class="user"><span>Xin chào, <b id="userName"></b></span><button class="link" id="logout">Đăng xuất</button></div>
+
+  <div class="summary">
+    <div><div class="lbl">Còn lại tháng này</div><div class="balance num" id="balance">0₩</div></div>
+    <div class="row2">
+      <div><div class="lbl">Thu nhập</div><div class="num inc" id="totalIn">0₩</div></div>
+      <div><div class="lbl">Đã chi</div><div class="num exp" id="totalOut">0₩</div></div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <span class="lbl">Ngân sách chi tiêu: <span class="num" id="budgetLabel"></span></span>
+        <button class="btn" id="editBudget" style="padding:2px 10px;font-size:.8rem">Sửa</button>
+      </div>
+      <div class="bar" id="budgetBar" style="margin-top:6px"><i></i></div>
+      <div class="note" id="budgetNote" style="margin-top:6px"></div>
+      <div id="budgetEdit" hidden style="margin-top:8px;display:flex;gap:8px">
+        <input id="budgetInput" type="number" min="0" step="10000" inputmode="numeric" aria-label="Ngân sách tháng (₩)">
+        <button class="btn primary" id="saveBudget">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Ghi khoản mới</h2>
+    <form id="txForm" novalidate>
+      <div class="seg full" role="group" aria-label="Loại">
+        <button type="button" id="tExp" aria-pressed="true">Khoản chi</button>
+        <button type="button" id="tInc" aria-pressed="false">Khoản thu</button>
+      </div>
+      <div class="field"><label class="lbl" for="amount">Số tiền (₩)</label>
+        <input id="amount" type="number" min="1" step="100" inputmode="numeric" placeholder="12000"></div>
+      <div class="field"><label class="lbl" for="category">Danh mục</label><select id="category"></select></div>
+      <div class="field"><label class="lbl" for="date">Ngày</label><input id="date" type="date"></div>
+      <div class="field"><label class="lbl" for="memo">Ghi chú</label><input id="memo" maxlength="100" placeholder="Cơm trưa căng tin"></div>
+      <div class="error full" id="txError"></div>
+      <button class="btn primary full" type="submit" id="txSubmit">Lưu khoản này</button>
+    </form>
+  </section>
+
+  <section><h2>Chi theo danh mục</h2><div class="cats" id="cats"></div></section>
+  <section><h2>Lịch sử trong tháng</h2><ul id="list"></ul></section>
+</div>
+
+<script>
+// ====== Gọi API ======
+const TOKEN_KEY = "sochitieu-token";
+let token = localStorage.getItem(TOKEN_KEY);
+
+async function api(path, { method = "GET", body } = {}) {
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers.Authorization = "Bearer " + token;
+  let res;
+  try {
+    res = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  } catch {
+    throw new Error("Không kết nối được server. Kiểm tra server Spring Boot còn đang chạy không.");
+  }
+  if (res.status === 401 && token) { logout(); throw new Error("Phiên đăng nhập đã hết, vui lòng đăng nhập lại."); }
+  if (res.status === 204) return null;
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    const fields = data && data.fields ? Object.values(data.fields) : [];
+    throw new Error(fields[0] || (data && data.message) || "Có lỗi xảy ra (" + res.status + ")");
+  }
+  return data;
+}
+
+// ====== Tiện ích ======
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString("ko-KR") + "₩";
+const pad = n => String(n).padStart(2, "0");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const today = new Date();
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+
+const EXP_CATS = ["Ăn uống", "Tiền phòng (월세)", "관리비 / điện nước gas", "Điện thoại", "Đi lại / xăng xe", "Học phí & sách", "Visa / bảo hiểm", "Gửi tiền về nhà", "Mua sắm", "Giải trí", "Khác"];
+const INC_CATS = ["Lương làm thêm", "Gia đình gửi", "Học bổng", "Khác"];
+
+// ====== Đăng nhập / Đăng ký ======
+let registerMode = false;
+function setAuthMode(reg) {
+  registerMode = reg;
+  $("authTitle").textContent = reg ? "Tạo tài khoản" : "Đăng nhập";
+  $("authSubmit").textContent = reg ? "Đăng ký" : "Đăng nhập";
+  $("switchText").textContent = reg ? "Đã có tài khoản?" : "Chưa có tài khoản?";
+  $("switchMode").textContent = reg ? "Đăng nhập" : "Đăng ký";
+  $("nameField").hidden = !reg;
+  $("password").autocomplete = reg ? "new-password" : "current-password";
+  $("authError").textContent = "";
+}
+$("switchMode").onclick = () => setAuthMode(!registerMode);
+
+$("authForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("authSubmit"); btn.disabled = true; $("authError").textContent = "";
+  try {
+    const body = { email: $("email").value.trim(), password: $("password").value };
+    if (registerMode) body.displayName = $("displayName").value.trim();
+    const data = await api(registerMode ? "/api/auth/register" : "/api/auth/login", { method: "POST", body });
+    token = data.token; localStorage.setItem(TOKEN_KEY, token);
+    $("password").value = "";
+    await showApp();
+  } catch (err) { $("authError").textContent = err.message; }
+  finally { btn.disabled = false; }
+});
+
+function logout() {
+  token = null; localStorage.removeItem(TOKEN_KEY);
+  $("appView").hidden = true; $("authView").hidden = false; setAuthMode(false);
+}
+$("logout").onclick = logout;
+
+// ====== App chính ======
+let view = new Date(today.getFullYear(), today.getMonth(), 1);
+let type = "EXPENSE";
+let me = null;
+
+function setType(t) {
+  type = t;
+  $("tExp").setAttribute("aria-pressed", t === "EXPENSE");
+  $("tInc").setAttribute("aria-pressed", t === "INCOME");
+  $("category").innerHTML = (t === "EXPENSE" ? EXP_CATS : INC_CATS).map(c => `<option>${c}</option>`).join("");
+}
+$("tExp").onclick = () => setType("EXPENSE");
+$("tInc").onclick = () => setType("INCOME");
+
+async function showApp() {
+  me = await api("/api/me");
+  $("userName").textContent = me.displayName;
+  $("authView").hidden = true; $("appView").hidden = false;
+  await load();
+}
+
+async function load() {
+  const key = monthKey(view);
+  $("monthLabel").textContent = `${pad(view.getMonth() + 1)}/${view.getFullYear()}`;
+  const [items, s] = await Promise.all([
+    api("/api/transactions?month=" + key),
+    api("/api/summary?month=" + key)
+  ]);
+  renderSummary(s); renderList(items);
+}
+
+function renderSummary(s) {
+  $("totalIn").textContent = fmt(s.income);
+  $("totalOut").textContent = fmt(s.expense);
+  $("balance").textContent = fmt(s.balance);
+  $("balance").className = "balance num" + (s.balance < 0 ? " exp" : "");
+  $("budgetLabel").textContent = s.budget ? fmt(s.budget) : "chưa đặt";
+  const pct = s.budgetUsedPercent ?? 0, bar = $("budgetBar");
+  bar.className = "bar" + (pct > 100 ? " over" : pct > 80 ? " near" : "");
+  bar.firstElementChild.style.width = Math.min(pct, 100) + "%";
+  let note = s.budget ? `Đã dùng ${pct}% ngân sách.` : "Bấm Sửa để đặt ngân sách tháng.";
+  if (s.budget && s.daysLeft) {
+    note += s.expense <= s.budget
+      ? ` Còn ${s.daysLeft} ngày, mỗi ngày tiêu tối đa khoảng ${fmt(s.dailyLimit)}.`
+      : ` Đã vượt ${fmt(s.expense - s.budget)}.`;
+  }
+  $("budgetNote").textContent = note;
+  const cats = s.expenseByCategory;
+  $("cats").innerHTML = cats.length
+    ? cats.map(c => `<div class="cat"><span>${esc(c.category)}</span><span class="num">${fmt(c.total)} <span class="note">· ${Math.round(c.percent)}%</span></span><div class="bar"><i style="width:${c.total / cats[0].total * 100}%"></i></div></div>`).join("")
+    : `<div class="empty">Chưa có khoản chi nào trong tháng này.</div>`;
+}
+
+function renderList(items) {
+  $("list").innerHTML = items.length
+    ? items.map(i => `<li><div class="t"><b>${esc(i.memo || i.category)}</b><span class="note">${i.date.slice(8)}/${i.date.slice(5, 7)} · ${esc(i.category)}</span></div>
+        <span class="num ${i.type === "INCOME" ? "inc" : "exp"}">${i.type === "INCOME" ? "+" : "−"}${fmt(i.amount)}</span>
+        <button class="del" data-id="${i.id}" aria-label="Xóa khoản này">✕</button></li>`).join("")
+    : `<li class="empty" style="display:block">Chưa có khoản nào. Ghi khoản đầu tiên ở mục "Ghi khoản mới".</li>`;
+}
+
+$("list").onclick = async e => {
+  const id = e.target.dataset.id; if (!id) return;
+  e.target.disabled = true;
+  try { await api("/api/transactions/" + id, { method: "DELETE" }); await load(); }
+  catch (err) { alert(err.message); e.target.disabled = false; }
+};
+
+$("txForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("txSubmit"); btn.disabled = true; $("txError").textContent = "";
+  try {
+    await api("/api/transactions", { method: "POST", body: {
+      type, amount: Number($("amount").value) || null, category: $("category").value,
+      date: $("date").value || null, memo: $("memo").value.trim()
+    }});
+    const d = new Date($("date").value);
+    view = new Date(d.getFullYear(), d.getMonth(), 1);
+    $("amount").value = ""; $("memo").value = "";
+    await load();
+  } catch (err) { $("txError").textContent = err.message; }
+  finally { btn.disabled = false; }
+});
+
+$("prev").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); load().catch(err => alert(err.message)); };
+$("next").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); load().catch(err => alert(err.message)); };
+
+$("editBudget").onclick = () => { const b = $("budgetEdit"); b.hidden = !b.hidden; $("budgetInput").value = me.monthlyBudget || ""; };
+$("saveBudget").onclick = async () => {
+  try {
+    me = await api("/api/me/budget", { method: "PUT", body: { monthlyBudget: Number($("budgetInput").value) || 0 } });
+    $("budgetEdit").hidden = true; await load();
+  } catch (err) { alert(err.message); }
+};
+
+// ====== Khởi động ======
+$("date").value = ymd(today);
+setType("EXPENSE");
+setAuthMode(false);
+if (token) showApp().catch(() => logout()); else logout();
+</script>
+</body>
+</html>

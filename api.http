@@ -1,0 +1,65 @@
+### Gọi thử API ngay trong IntelliJ (mở file này, bấm nút ▶ bên cạnh từng request)
+
+@base = http://localhost:8080
+
+### 1. Đăng ký
+POST {{base}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "phong@example.com",
+  "password": "matkhau123",
+  "displayName": "Phong"
+}
+
+### 2. Đăng nhập (copy "token" trong kết quả, dán vào biến @token bên dưới)
+POST {{base}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "phong@example.com",
+  "password": "matkhau123"
+}
+
+###
+@token = DAN_TOKEN_VAO_DAY
+
+### 3. Đặt ngân sách tháng 1.000.000₩
+PUT {{base}}/api/me/budget
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "monthlyBudget": 1000000 }
+
+### 4. Ghi khoản thu
+POST {{base}}/api/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "type": "INCOME", "amount": 1450000, "category": "Lương làm thêm", "date": "2026-11-01", "memo": "Lương giao hàng" }
+
+### 5. Ghi khoản chi
+POST {{base}}/api/transactions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "type": "EXPENSE", "amount": 9500, "category": "Ăn uống", "date": "2026-11-12", "memo": "Cơm căng tin" }
+
+### 6. Danh sách khoản trong tháng
+GET {{base}}/api/transactions?month=2026-11
+Authorization: Bearer {{token}}
+
+### 7. Tổng kết tháng
+GET {{base}}/api/summary?month=2026-11
+Authorization: Bearer {{token}}
+
+### 8. Sửa khoản id=2
+PUT {{base}}/api/transactions/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "type": "EXPENSE", "amount": 12000, "category": "Ăn uống", "date": "2026-11-12", "memo": "Cơm + nước" }
+
+### 9. Xóa khoản id=2
+DELETE {{base}}/api/transactions/2
+Authorization: Bearer {{token}}

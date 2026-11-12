@@ -1,0 +1,10 @@
+target/
+data/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.settings/
+.classpath
+.project
+Claude outputs/
