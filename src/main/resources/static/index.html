@@ -39,9 +39,9 @@
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0B1120; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
-  --card:rgba(30,41,59,.62); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
-  --stroke:rgba(148,163,184,.12); --stroke-hi:rgba(255,255,255,.06);
+  --bg:#060A14; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
+  --card:rgba(15,23,42,.75); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
+  --stroke:rgba(255,255,255,.08); --stroke-hi:rgba(255,255,255,.06);
   --fg:#F1F5F9; --fg-2:#CBD5E1; --muted:#8A9BB2;
   --income:#10B981; --income-hi:#34D399; --income-soft:rgba(16,185,129,.15);
   --expense:#F43F5E; --expense-soft:rgba(244,63,94,.15); --warn:#F59E0B;
@@ -49,11 +49,11 @@
   --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 30px -14px rgba(0,0,0,.6);
   --shadow-lg:0 20px 44px -16px rgba(0,0,0,.7);
   --hero-1:#13203A; --hero-2:#0A4A3A; --hero-fg:#F8FAFC; --hero-muted:#9FB0C4;
-  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(22,32,50,.78); color-scheme:dark}}
+  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(15,23,42,.75); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0B1120; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
-  --card:rgba(30,41,59,.62); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
-  --stroke:rgba(148,163,184,.12); --stroke-hi:rgba(255,255,255,.06);
+  --bg:#060A14; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
+  --card:rgba(15,23,42,.75); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
+  --stroke:rgba(255,255,255,.08); --stroke-hi:rgba(255,255,255,.06);
   --fg:#F1F5F9; --fg-2:#CBD5E1; --muted:#8A9BB2;
   --income:#10B981; --income-hi:#34D399; --income-soft:rgba(16,185,129,.15);
   --expense:#F43F5E; --expense-soft:rgba(244,63,94,.15); --warn:#F59E0B;
@@ -61,7 +61,7 @@
   --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 30px -14px rgba(0,0,0,.6);
   --shadow-lg:0 20px 44px -16px rgba(0,0,0,.7);
   --hero-1:#13203A; --hero-2:#0A4A3A; --hero-fg:#F8FAFC; --hero-muted:#9FB0C4;
-  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(22,32,50,.78); color-scheme:dark}
+  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(15,23,42,.75); color-scheme:dark}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
@@ -353,9 +353,85 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
 .sheet .bal-in{display:flex;align-items:baseline;justify-content:center;gap:6px;margin:6px 0 4px}
 .sheet .bal-in input{border:0;border-bottom:2px solid var(--stroke);border-radius:0;background:none;text-align:center;font-size:2.3rem;font-weight:750;padding:0 0 4px;width:100%;max-width:290px;-moz-appearance:textfield}
 .sheet .bal-in input:focus{border-color:var(--income-hi)}
+
+/* ===================== LỚP NỀN KHÔNG GIAN ===================== */
+body::before{display:none}
+/* 1. Nền tối sâu + quầng sáng ở các góc */
+.space{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(60% 45% at 0% 0%,rgba(16,185,129,.22),transparent 70%),
+    radial-gradient(55% 45% at 100% 100%,rgba(59,130,246,.18),transparent 70%),
+    linear-gradient(180deg,color-mix(in srgb,var(--bg) 85%,#0A2A24) 0%,var(--bg) 45%,color-mix(in srgb,var(--bg) 88%,#0A1A33) 100%)}
+/* Các đốm sáng trôi lững lờ */
+.orb{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform}
+.o1{width:48vmax;height:48vmax;left:-18vmax;top:-18vmax;background:radial-gradient(circle,rgba(16,185,129,.45),transparent 65%);animation:orb1 22s ease-in-out infinite alternate}
+.o2{width:44vmax;height:44vmax;right:-16vmax;bottom:-16vmax;background:radial-gradient(circle,rgba(59,130,246,.38),transparent 65%);animation:orb2 26s ease-in-out infinite alternate}
+.o3{width:26vmax;height:26vmax;right:-8vmax;top:22vh;background:radial-gradient(circle,rgba(45,212,191,.20),transparent 65%);animation:orb3 30s ease-in-out infinite alternate}
+.o4{width:22vmax;height:22vmax;left:-6vmax;bottom:18vh;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 65%);animation:orb4 34s ease-in-out infinite alternate}
+@keyframes orb1{to{transform:translate(10vmax,8vmax) scale(1.12)}}
+@keyframes orb2{to{transform:translate(-9vmax,-10vmax) scale(1.1)}}
+@keyframes orb3{to{transform:translate(-8vmax,12vmax) scale(.9)}}
+@keyframes orb4{to{transform:translate(8vmax,-10vmax) scale(1.15)}}
+/* 2. Lưới chấm mờ + lớp hạt mịn để nền không bị bẹt màu */
+.space .grid{position:absolute;inset:0;opacity:.55;
+  background-image:radial-gradient(rgba(148,163,184,.10) 1px,transparent 1px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 15%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse at 50% 15%,#000 0%,transparent 70%)}
+.space::after{content:"";position:absolute;inset:0;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+:root[data-theme="light"] .orb{opacity:.5}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .orb{opacity:.5}}
+:root[data-theme="light"] .space::after{opacity:.05;mix-blend-mode:multiply}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .space::after{opacity:.05;mix-blend-mode:multiply}}
+
+/* 3. Kính mờ cho thẻ & thanh điều hướng */
+.card,.list,.tpl,.month,.nav{backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%)}
+.card,.list,.tpl,.btn{transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
+.topbar{background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid transparent;transition:border-color .2s}
+body.scrolled .topbar{border-bottom-color:var(--stroke)}
+
+/* 4. Ánh sáng tương tác: hover (máy tính) và chạm (điện thoại) */
+@media (hover:hover){
+  .card:hover,.tpl:hover,.list:hover{transform:translateY(-3px);border-color:rgba(16,185,129,.25);
+    box-shadow:0 10px 25px -5px rgba(16,185,129,.25),0 0 0 1px rgba(16,185,129,.25),inset 0 0 40px -20px rgba(16,185,129,.25)}
+  .btn:hover{transform:translateY(-3px);border-color:rgba(16,185,129,.25);box-shadow:0 10px 25px -5px rgba(16,185,129,.25)}
+  .hero:hover{box-shadow:0 18px 44px -14px rgba(16,185,129,.35)}
+}
+.card:active,.tpl:active,.list:active{border-color:rgba(16,185,129,.25);
+  box-shadow:0 8px 22px -6px rgba(16,185,129,.25),inset 0 0 40px -20px rgba(16,185,129,.25)}
+.hero{transition:box-shadow .3s var(--ease)}
+
+/* Số liệu chính: chữ gradient xanh ngọc */
+.hero .big{background:linear-gradient(100deg,#FFFFFF 10%,#A7F3D0 55%,#34D399 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wallet .wamt,.breakdown .num{background:linear-gradient(100deg,#F8FAFC,#A7F3D0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wallet.unset .wamt{background:none;color:#6EE7B7}
+#balance[style*="FB7185"]{background:none;-webkit-text-fill-color:#FB7185}
+.donut .center b,.stat .num{background:linear-gradient(100deg,var(--income),#22D3EE);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .num.exp{background:none;color:var(--expense)}
+.tick{animation:tick .75s var(--ease)}
+@keyframes tick{0%{filter:brightness(1.6)}100%{filter:none}}
+
+/* Empty state sinh động */
+.empty.lively .art-wrap{position:relative;display:grid;place-items:center;width:150px;height:118px}
+.empty.lively .ring{position:absolute;width:96px;height:96px;border-radius:50%;border:2px solid rgba(16,185,129,.45);animation:ring 2.4s ease-out infinite}
+.empty.lively .ring.r2{animation-delay:1.2s}
+@keyframes ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.empty.lively svg{position:relative}
+.btn.pulse{animation:btnpulse 2.2s ease-in-out infinite}
+@keyframes btnpulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.45),0 8px 20px -10px rgba(16,185,129,.8)}50%{box-shadow:0 0 0 10px rgba(16,185,129,0),0 8px 20px -10px rgba(16,185,129,.8)}}
+
+/* Thanh điều hướng: tab đang chọn phát sáng */
+.nav-ind{background:linear-gradient(180deg,rgba(16,185,129,.22),rgba(16,185,129,.10));box-shadow:0 0 18px -2px rgba(16,185,129,.45),inset 0 0 0 1px rgba(52,211,153,.25)}
+.tab[aria-current="page"]{color:#34D399}
+:root[data-theme="light"] .tab[aria-current="page"]{color:var(--income)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tab[aria-current="page"]{color:var(--income)}}
+.tab[aria-current="page"] svg{filter:drop-shadow(0 0 6px rgba(52,211,153,.75))}
+.nav{box-shadow:var(--shadow-lg),0 0 0 1px rgba(16,185,129,.08)}
+.fab{animation:fabglow 3s ease-in-out infinite}
+@keyframes fabglow{0%,100%{box-shadow:0 14px 28px -10px rgba(16,185,129,.75),inset 0 1px 0 rgba(255,255,255,.35)}50%{box-shadow:0 14px 34px -6px rgba(16,185,129,.95),inset 0 1px 0 rgba(255,255,255,.35)}}
 </style>
 </head>
 <body>
+<div class="space" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i><i class="orb o4"></i><span class="grid"></span></div>
 
 <!-- ========== ĐĂNG NHẬP ========== -->
 <div class="auth" id="authView" hidden>
@@ -934,25 +1010,31 @@ function renderAll() {
 }
 
 // ---------- Thẻ tổng quan ----------
-let lastNet = 0, countRaf;
-function countUp(el, to) {
-  cancelAnimationFrame(countRaf);
-  const from = lastNet; lastNet = to;
-  const f = v => money(v, v < 0 ? "−" : "");
+// Số chạy mượt từ giá trị cũ tới giá trị mới (mỗi phần tử tự nhớ giá trị trước của nó)
+const counterRaf = new WeakMap();
+function countUp(el, to, sign = v => v < 0 ? "−" : "") {
+  cancelAnimationFrame(counterRaf.get(el));
+  const from = Number(el.dataset.v ?? 0); el.dataset.v = to;
+  const f = v => money(v, sign(v));
   if (privacy || from === to || matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = f(to); return; }
-  const t0 = performance.now(), dur = 700;
-  const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = f(Math.round(from + (to - from) * e)); if (k < 1) countRaf = requestAnimationFrame(step); };
-  countRaf = requestAnimationFrame(step);
+  el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick");
+  const t0 = performance.now(), dur = 750;
+  const step = now => {
+    const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = f(Math.round(from + (to - from) * e));
+    if (k < 1) counterRaf.set(el, requestAnimationFrame(step));
+  };
+  counterRaf.set(el, requestAnimationFrame(step));
 }
 function renderHero() {
   const s = summary;
   const set = s.currentBalance !== null && s.currentBalance !== undefined;
   $("walletBtn").classList.toggle("unset", !set);
-  $("curBalance").textContent = set ? money(s.currentBalance, s.currentBalance < 0 ? "−" : "") : t("setBalance");
+  if (set) countUp($("curBalance"), s.currentBalance); else { $("curBalance").textContent = t("setBalance"); delete $("curBalance").dataset.v; }
   countUp($("netIncome"), s.netIncome);
-  $("income").textContent = money(s.income);
-  $("incomeCost").textContent = money(s.incomeCost, s.incomeCost ? "−" : "");
-  $("balance").textContent = money(s.balance, s.balance < 0 ? "−" : "");
+  countUp($("income"), s.income, () => "");
+  countUp($("incomeCost"), s.incomeCost, v => v ? "−" : "");
+  countUp($("balance"), s.balance);
   $("balance").style.color = s.balance < 0 ? "#FB7185" : "";
   const hasGoal = s.incomeGoal > 0;
   $("goalBox").hidden = !hasGoal; $("goalEmpty").hidden = hasGoal;
@@ -1016,7 +1098,7 @@ $("viewMonth").onclick = () => { chartMode = "month"; renderChart(); };
 function renderSpend() {
   const s = summary, cats = s.expenseByCategory || [];
   const R = 52, C = 2 * Math.PI * R;
-  $("donutTotal").textContent = money(s.expense);
+  countUp($("donutTotal"), s.expense, () => "");
   if (!cats.length) {
     $("donutSvg").innerHTML = `<circle cx="65" cy="65" r="${R}" stroke="var(--card-2)" stroke-dasharray="4 6"></circle>`;
     $("donutLegend").innerHTML = `<span class="sub">${t("noSpend")}</span>`;
@@ -1041,9 +1123,9 @@ function renderSpend() {
   if (s.daysLeft) {
     const over = s.expense > s.budget;
     $("dailyLabel").textContent = over ? t("overBudget") : t("perDay", { n: s.daysLeft });
-    $("dailyLimit").textContent = money(over ? s.expense - s.budget : s.dailyLimit);
+    countUp($("dailyLimit"), over ? s.expense - s.budget : s.dailyLimit, () => "");
     $("dailyLimit").className = "num" + (over ? " exp" : "");
-  } else { $("dailyLabel").textContent = t("used"); $("dailyLimit").textContent = pct + "%"; $("dailyLimit").className = "num"; }
+  } else { $("dailyLabel").textContent = t("used"); delete $("dailyLimit").dataset.v; $("dailyLimit").textContent = pct + "%"; $("dailyLimit").className = "num"; }
 }
 
 // ---------- Danh sách giao dịch ----------
@@ -1067,8 +1149,8 @@ const EMPTY_ART = `<svg class="float" viewBox="0 0 132 104" fill="none" aria-hid
   <path d="M20 40l3 3m0-3l-3 3M112 64l2.5 2.5m0-2.5L112 66.5" stroke="#F59E0B" stroke-width="1.6" stroke-linecap="round"/>
   <circle cx="22" cy="70" r="2.5" fill="#22D3EE"/><circle cx="116" cy="44" r="2" fill="#A78BFA"/>
 </svg>`;
-const emptyHtml = () => `<div class="empty" style="color:var(--fg)">${EMPTY_ART}<p class="title" style="margin:0">${t("emptyTitle")}</p>
-  <p class="sub" style="margin:0">${t("emptySub")}</p><button class="btn primary" data-open-sheet>${t("emptyCta")}</button></div>`;
+const emptyHtml = () => `<div class="empty lively" style="color:var(--fg)"><div class="art-wrap"><span class="ring"></span><span class="ring r2"></span>${EMPTY_ART}</div><p class="title" style="margin:0">${t("emptyTitle")}</p>
+  <p class="sub" style="margin:0">${t("emptySub")}</p><button class="btn primary pulse" data-open-sheet>＋ ${t("emptyCta")}</button></div>`;
 function renderLists() {
   $("recent").innerHTML = items.length ? items.slice(0, 5).map(txRow).join("") : emptyHtml();
   if (!items.length) { $("history").innerHTML = `<div class="list">${emptyHtml()}</div>`; return; }
@@ -1088,7 +1170,7 @@ function applyPrivacy() {
   $("eyeBtn").setAttribute("aria-pressed", privacy);
   $("eyeBtn").setAttribute("aria-label", privacy ? t("showAmounts") : t("hideAmounts"));
 }
-$("eyeBtn").onclick = () => { privacy = !privacy; store.set("sct-privacy", privacy); applyPrivacy(); renderAll(); renderTemplates(); };
+$("eyeBtn").onclick = () => { document.querySelectorAll("[data-v]").forEach(el => delete el.dataset.v); privacy = !privacy; store.set("sct-privacy", privacy); applyPrivacy(); renderAll(); renderTemplates(); };
 
 // ============================ NHẬP NHANH ============================
 function renderTemplates() {
@@ -1223,6 +1305,7 @@ function confetti() {
 }
 
 // ============================ KHỞI ĐỘNG ============================
+addEventListener("scroll", () => document.body.classList.toggle("scrolled", scrollY > 8), { passive: true });
 try { const old = localStorage.getItem("sochitieu-token"); if (old && !token) { token = old; store.set("sct-token", old); } localStorage.removeItem("sochitieu-token"); } catch {}
 applyTheme(); applyI18n(); applyPrivacy();
 initGoogle();
