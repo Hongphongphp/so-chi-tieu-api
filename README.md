@@ -39,6 +39,9 @@ Mọi API trừ `/api/auth/**` cần header `Authorization: Bearer <token>`.
 | POST | `/api/auth/login` | Đăng nhập, trả token |
 | GET | `/api/me` | Thông tin tài khoản |
 | PUT | `/api/me/budget` | Đặt ngân sách tháng |
+| PUT | `/api/me/balance` | Nhập số dư hiện tại `{ "currentBalance": 3000000 }` |
+| POST | `/api/auth/google` | Đăng nhập bằng Google `{ "credential": "<ID token>" }` |
+| GET | `/api/auth/config` | Cấu hình công khai (Google Client ID) |
 | PUT | `/api/me/goal` | Đặt mục tiêu thu nhập thực nhận tháng `{ "monthlyIncomeGoal": 2500000 }` |
 | GET | `/api/transactions?month=2026-11` | Khoản thu chi trong tháng |
 | POST | `/api/transactions` | Thêm khoản |
@@ -72,6 +75,10 @@ Ví dụ kết quả `/api/summary`:
 
 Lỗi trả về JSON `{ status, message, fields, timestamp }`:
 `400` dữ liệu sai (xem `fields`), `401` chưa đăng nhập hoặc sai mật khẩu, `404` không tìm thấy hoặc không phải dữ liệu của bạn, `409` email đã đăng ký.
+
+## Đăng nhập Google
+
+Tạo OAuth Client ID (loại Web application) trong Google Cloud Console, thêm Authorized JavaScript origins là domain của app (và `http://localhost:8080` khi chạy trên máy), rồi đặt biến môi trường `GOOGLE_CLIENT_ID`. Để trống thì nút Google tự ẩn.
 
 ## Trước khi deploy
 

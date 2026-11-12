@@ -29,6 +29,10 @@ public final class AuthDtos {
             @NotBlank(message = "Vui lòng nhập mật khẩu") String password) {
     }
 
+    public record GoogleLoginRequest(
+            @NotBlank(message = "Thiếu thông tin đăng nhập Google") String credential) {
+    }
+
     public record AuthResponse(String token, UserResponse user) {
     }
 }

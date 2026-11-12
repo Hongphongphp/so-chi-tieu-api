@@ -2,6 +2,7 @@ package com.phong.sochitieu.summary;
 
 import com.phong.sochitieu.common.MonthParam;
 import com.phong.sochitieu.transaction.Transaction;
+import com.phong.sochitieu.transaction.TransactionRepository;
 import com.phong.sochitieu.transaction.TransactionService;
 import com.phong.sochitieu.transaction.TransactionType;
 import com.phong.sochitieu.user.User;
@@ -32,18 +33,23 @@ public class SummaryController {
      * balance      : còn lại = netIncome - expense
      * incomeGoal / goalPercent / goalRemaining: mục tiêu thực nhận tháng và tiến độ
      * dailyLimit   : số tiền có thể tiêu mỗi ngày còn lại để không vượt ngân sách (chỉ tháng hiện tại)
+     * currentBalance: số dư hiện tại (mọi thời điểm), null nếu người dùng chưa nhập số dư
      */
     public record MonthlySummary(String month, long income, long incomeCost, long netIncome, long expense, long balance,
                                  long budget, Integer budgetUsedPercent, Integer daysLeft, Long dailyLimit,
                                  long incomeGoal, Integer goalPercent, Long goalRemaining,
+                                 Long currentBalance,
                                  List<CategoryTotal> expenseByCategory) {
     }
 
     private final TransactionService transactionService;
+    private final TransactionRepository transactionRepository;
     private final MonthParam monthParam;
 
-    public SummaryController(TransactionService transactionService, MonthParam monthParam) {
+    public SummaryController(TransactionService transactionService, TransactionRepository transactionRepository,
+                             MonthParam monthParam) {
         this.transactionService = transactionService;
+        this.transactionRepository = transactionRepository;
         this.monthParam = monthParam;
     }
 
@@ -85,8 +91,12 @@ public class SummaryController {
         Integer goalPercent = goal > 0 ? (int) Math.round(Math.max(0, netIncome) * 100.0 / goal) : null;
         Long goalRemaining = goal > 0 ? Math.max(0, goal - netIncome) : null;
 
+        Long currentBalance = user.isBalanceSet()
+                ? user.getOpeningBalance() + transactionRepository.sumAllTimeNet(user.getId())
+                : null;
+
         return new MonthlySummary(ym.toString(), income, incomeCost, netIncome, expense, netIncome - expense,
-                budget, usedPercent, daysLeft, dailyLimit, goal, goalPercent, goalRemaining, categories);
+                budget, usedPercent, daysLeft, dailyLimit, goal, goalPercent, goalRemaining, currentBalance, categories);
     }
 
     private static double round1(double v) {

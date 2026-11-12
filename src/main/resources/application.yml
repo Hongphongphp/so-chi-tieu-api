@@ -23,3 +23,6 @@ app:
     secret: ${JWT_SECRET:c28tY2hpLXRpZXUtZGV2LXNlY3JldC1rZXktb25seS1mb3ItbG9jYWwtMzJieXRlcw==}
     expiration-ms: 604800000 # 7 ngày
   timezone: Asia/Seoul
+  google:
+    # Client ID OAuth của Google (dạng ...apps.googleusercontent.com). Để trống = tắt nút Đăng nhập Google.
+    client-id: ${GOOGLE_CLIENT_ID:}

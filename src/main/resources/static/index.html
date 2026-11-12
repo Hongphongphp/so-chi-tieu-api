@@ -308,108 +308,166 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 body.loading .screen{opacity:.6;transition:opacity .2s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:360px){.hero .big{font-size:2.1rem}.hello b{font-size:1.35rem}}
+
+/* ===== Lớp sinh động: aurora, ví, màu danh mục, donut, chuỗi ngày, ngôn ngữ ===== */
+.aurora{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none;z-index:0}
+.aurora i{position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(46px);opacity:.55;mix-blend-mode:screen}
+.aurora i:nth-child(1){background:#10B981;top:-120px;right:-60px;animation:drift1 14s ease-in-out infinite alternate}
+.aurora i:nth-child(2){background:#22D3EE;bottom:-150px;left:-90px;opacity:.35;animation:drift2 17s ease-in-out infinite alternate}
+.aurora i:nth-child(3){background:#A78BFA;top:30%;right:-140px;opacity:.28;animation:drift3 20s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(-90px,70px) scale(1.15)}}
+@keyframes drift2{to{transform:translate(110px,-60px) scale(1.2)}}
+@keyframes drift3{to{transform:translate(-120px,-40px) scale(.9)}}
+.hero>.aurora{position:absolute}
+.wallet{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:inherit;border-radius:16px;padding:9px 13px;text-align:left;
+  display:flex;align-items:center;gap:10px;min-width:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .15s var(--ease),background .15s}
+.wallet:active{transform:scale(.97)}
+.wallet .wi{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(140deg,#34D399,#22D3EE);color:#03140E;flex:none}
+.wallet .wi svg{width:17px;height:17px}
+.wallet .lbl{display:block;font-size:.68rem;color:var(--hero-muted)}
+.wallet .wamt{display:block;font-weight:700;font-size:1rem;white-space:nowrap}
+.wallet.unset .wamt{font-family:var(--font);font-size:.86rem;color:#6EE7B7}
+.streak{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:650;padding:3px 9px;border-radius:999px;margin-top:6px;
+  background:linear-gradient(90deg,rgba(251,146,60,.18),rgba(244,63,94,.14));color:#F97316}
+.donut-wrap{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:center}
+.donut{position:relative;width:130px;height:130px}
+.donut svg{width:130px;height:130px;transform:rotate(-90deg)}
+.donut circle{fill:none;stroke-width:16;transition:stroke-dasharray .7s var(--ease)}
+.donut .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
+.donut .center b{display:block;font-size:.95rem;font-weight:750}
+.legend-list{display:flex;flex-direction:column;gap:9px;min-width:0}
+.lg{display:grid;grid-template-columns:10px 1fr auto;gap:8px;align-items:center;font-size:.8rem}
+.lg i{width:10px;height:10px;border-radius:3px}
+.lg span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.lg .num{font-weight:650}
+.langsw{display:inline-grid;grid-auto-flow:column;gap:2px;background:var(--card);border:1px solid var(--stroke);border-radius:999px;padding:3px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.langsw button{border:0;background:none;padding:5px 10px;border-radius:999px;font-size:.78rem;font-weight:650;color:var(--muted)}
+.langsw button[aria-pressed="true"]{background:var(--income-soft);color:var(--income)}
+.auth-top{display:flex;justify-content:space-between;align-items:center}
+.divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.78rem}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--stroke)}
+#gBtn{display:flex;justify-content:center;min-height:44px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
+.tpl .e,.tx .ic,.catbtn .e{transition:transform .2s var(--ease)}
+.tpl:active .e{transform:rotate(-8deg) scale(1.08)}
+.sheet .bal-in{display:flex;align-items:baseline;justify-content:center;gap:6px;margin:6px 0 4px}
+.sheet .bal-in input{border:0;border-bottom:2px solid var(--stroke);border-radius:0;background:none;text-align:center;font-size:2.3rem;font-weight:750;padding:0 0 4px;width:100%;max-width:290px;-moz-appearance:textfield}
+.sheet .bal-in input:focus{border-color:var(--income-hi)}
 </style>
 </head>
 <body>
 
 <!-- ========== ĐĂNG NHẬP ========== -->
 <div class="auth" id="authView" hidden>
-  <div class="logo">₩</div>
+  <div class="auth-top">
+    <div class="logo">₩</div>
+    <div class="langsw" role="group" aria-label="Language">
+      <button data-lang-set="vi">VI</button><button data-lang-set="en">EN</button><button data-lang-set="ko">한</button>
+    </div>
+  </div>
   <div>
-    <h1>Sổ Chi Tiêu Du Học</h1>
-    <p class="muted" style="margin:4px 0 0">Biết chính xác mình thực nhận bao nhiêu, và mỗi ngày còn tiêu được bao nhiêu.</p>
+    <h1 data-i18n="appName">Sổ Chi Tiêu Du Học</h1>
+    <p class="muted" style="margin:6px 0 0" data-i18n="tagline"></p>
+  </div>
+  <div id="googleBox" hidden>
+    <div id="gBtn"></div>
+    <div class="divider" style="margin-top:16px" data-i18n="or"></div>
   </div>
   <form id="authForm" novalidate>
-    <div class="field" id="nameField" hidden><label class="lbl" for="displayName">Tên hiển thị</label>
+    <div class="field" id="nameField" hidden><label class="lbl" for="displayName" data-i18n="displayName"></label>
       <input id="displayName" maxlength="60" autocomplete="nickname"></div>
     <div class="field"><label class="lbl" for="email">Email</label>
       <input id="email" type="email" inputmode="email" autocomplete="email"></div>
-    <div class="field"><label class="lbl" for="password">Mật khẩu</label>
+    <div class="field"><label class="lbl" for="password" data-i18n="password"></label>
       <input id="password" type="password" autocomplete="current-password"></div>
     <p class="error" id="authError"></p>
-    <button class="btn primary block" type="submit" id="authSubmit">Đăng nhập</button>
+    <button class="btn primary block" type="submit" id="authSubmit"></button>
   </form>
-  <p class="muted" style="margin:0;text-align:center"><span id="switchText">Chưa có tài khoản?</span>
-    <button class="link" id="switchMode" type="button">Đăng ký</button></p>
+  <p class="muted" style="margin:0;text-align:center"><span id="switchText"></span>
+    <button class="link" id="switchMode" type="button"></button></p>
 </div>
 
 <!-- ========== APP ========== -->
 <div class="app" id="appView" hidden>
   <header class="topbar">
-    <div class="hello"><span class="lbl" id="screenSub">Xin chào</span><b id="screenTitle">Phong</b></div>
+    <div class="hello"><span class="lbl" id="screenSub"></span><b id="screenTitle"></b><span class="streak" id="streak" hidden></span></div>
     <div class="month" id="monthNav">
-      <button id="prev" aria-label="Tháng trước">‹</button>
+      <button id="prev" data-i18n-aria="prevMonth">‹</button>
       <strong id="monthLabel" class="num">—</strong>
-      <button id="next" aria-label="Tháng sau">›</button>
+      <button id="next" data-i18n-aria="nextMonth">›</button>
     </div>
   </header>
 
   <!-- ===== Tổng quan ===== -->
   <main class="screen" id="homeScreen">
-    <section class="hero" aria-label="Tổng quan tháng">
+    <section class="hero">
+      <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="hero-top">
-        <div style="min-width:0">
-          <div class="lbl">Thực nhận tháng này</div>
-          <div class="amount-row">
-            <div class="big num" id="netIncome" data-money>0₩</div>
-          </div>
-        </div>
-        <button class="eye" id="eyeBtn" aria-label="Ẩn số tiền" aria-pressed="false">
+        <button class="wallet" id="walletBtn">
+          <span class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><circle cx="16" cy="14" r="1.4" fill="currentColor"/></svg></span>
+          <span style="min-width:0"><span class="lbl" data-i18n="currentBalance"></span><span class="wamt num" id="curBalance">—</span></span>
+        </button>
+        <button class="eye" id="eyeBtn" aria-pressed="false">
           <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
           <svg id="eyeClosed" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6A17.4 17.4 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
         </button>
       </div>
-
-      <div class="breakdown">
-        <div><span class="lbl">Tổng thu</span><span class="num" id="income">0₩</span></div>
-        <div><span class="lbl">Chi phí đi kèm</span><span class="num" id="incomeCost">0₩</span></div>
-        <div><span class="lbl">Còn lại</span><span class="num" id="balance">0₩</span></div>
+      <div>
+        <div class="lbl" data-i18n="netThisMonth"></div>
+        <div class="big num" id="netIncome">0₩</div>
       </div>
-
+      <div class="breakdown">
+        <div><span class="lbl" data-i18n="grossIncome"></span><span class="num" id="income">0₩</span></div>
+        <div><span class="lbl" data-i18n="incomeCost"></span><span class="num" id="incomeCost">0₩</span></div>
+        <div><span class="lbl" data-i18n="leftThisMonth"></span><span class="num" id="balance">0₩</span></div>
+      </div>
       <div class="goal" id="goalBox">
-        <div class="goal-line"><span class="lbl">Mục tiêu tháng <b class="num" id="goalTarget" style="color:var(--hero-fg)"></b></span><span class="pill" id="goalPct">0%</span></div>
+        <div class="goal-line"><span class="lbl"><span data-i18n="monthlyGoal"></span> <b class="num" id="goalTarget" style="color:var(--hero-fg)"></b></span><span class="pill" id="goalPct">0%</span></div>
         <div class="track"><i id="goalBar"></i></div>
-        <div class="goal-line"><span class="lbl" id="goalRemain"></span><button class="link" data-go="settings" style="color:#34D399">Sửa</button></div>
+        <div class="goal-line"><span class="lbl" id="goalRemain"></span><button class="link" data-go="settings" style="color:#34D399" data-i18n="edit"></button></div>
       </div>
       <button class="goal-empty" id="goalEmpty" data-go="settings" hidden>
-        <span><b style="display:block">Đặt mục tiêu thu nhập tháng</b><span class="lbl">Xem còn thiếu bao nhiêu để đạt mục tiêu</span></span>
-        <span class="pill">Đặt ngay</span>
+        <span><b style="display:block" data-i18n="setGoalTitle"></b><span class="lbl" data-i18n="setGoalSub"></span></span>
+        <span class="pill" data-i18n="setNow"></span>
       </button>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2 class="title">Nhập nhanh</h2><span class="sub">Chạm 1 lần để ghi</span></div>
+      <div class="section-head"><h2 class="title" data-i18n="quickAdd"></h2><span class="sub" data-i18n="quickAddSub"></span></div>
       <div class="templates" id="templates"></div>
     </section>
 
     <section class="card">
       <div class="card-head">
-        <div><h2 class="title">Thu nhập thực nhận</h2><span class="sub" id="chartSub">7 ngày gần nhất</span></div>
-        <div class="seg" role="group" aria-label="Kiểu biểu đồ">
-          <button id="view7" aria-pressed="true">7 ngày</button>
-          <button id="viewMonth" aria-pressed="false">Tháng</button>
+        <div><h2 class="title" data-i18n="netIncomeChart"></h2><span class="sub" id="chartSub"></span></div>
+        <div class="seg" role="group">
+          <button id="view7" aria-pressed="true" data-i18n="days7"></button>
+          <button id="viewMonth" aria-pressed="false" data-i18n="month"></button>
         </div>
       </div>
-      <div id="chart7" class="bars" aria-label="Biểu đồ cột 7 ngày"></div>
+      <div id="chart7" class="bars"></div>
       <div id="chartMonth" hidden>
-        <div class="heat-wd"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+        <div class="heat-wd" id="heatWd"></div>
         <div class="heat" id="heat"></div>
-        <div class="legend">Ít <i style="background:var(--heat-0)"></i><i style="background:rgba(16,185,129,.28)"></i><i style="background:rgba(16,185,129,.5)"></i><i style="background:rgba(16,185,129,.75)"></i><i style="background:#10B981"></i> Nhiều</div>
+        <div class="legend"><span data-i18n="less"></span> <i style="background:var(--heat-0)"></i><i style="background:rgba(16,185,129,.28)"></i><i style="background:rgba(16,185,129,.5)"></i><i style="background:rgba(16,185,129,.75)"></i><i style="background:#10B981"></i> <span data-i18n="more"></span></div>
       </div>
       <p class="chart-note" id="chartNote"></p>
     </section>
 
-    <section class="card" id="budgetCard">
-      <div class="card-head" style="margin-bottom:14px"><div><h2 class="title">Ngân sách chi tiêu</h2><span class="sub num" id="budgetPct"></span></div></div>
-      <div class="bar" id="budgetBar"><i></i></div>
-      <div class="stat">
-        <span class="lbl" id="dailyLabel">Mỗi ngày còn tiêu được</span>
-        <span class="num" id="dailyLimit">—</span>
+    <section class="card" id="spendCard">
+      <div class="card-head" style="margin-bottom:14px"><div><h2 class="title" data-i18n="spendByCat"></h2><span class="sub num" id="budgetPct"></span></div></div>
+      <div class="donut-wrap" id="donutWrap">
+        <div class="donut"><svg viewBox="0 0 130 130" id="donutSvg"></svg><div class="center"><span><span class="lbl" data-i18n="spent"></span><b class="num" id="donutTotal">0₩</b></span></div></div>
+        <div class="legend-list" id="donutLegend"></div>
+      </div>
+      <div id="budgetBlock">
+        <div class="bar" id="budgetBar" style="margin-top:18px"><i></i></div>
+        <div class="stat"><span class="lbl" id="dailyLabel"></span><span class="num" id="dailyLimit">—</span></div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head"><h2 class="title">Giao dịch gần đây</h2><button class="link" data-go="history">Xem tất cả</button></div>
+      <div class="section-head"><h2 class="title" data-i18n="recent"></h2><button class="link" data-go="history" data-i18n="seeAll"></button></div>
       <div class="list" id="recent"></div>
     </section>
   </main>
@@ -420,48 +478,57 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
   <!-- ===== Cài đặt ===== -->
   <main class="screen" id="settingsScreen" hidden>
     <section class="card">
-      <h2 class="title">Mục tiêu thu nhập thực nhận mỗi tháng</h2>
+      <h2 class="title" data-i18n="currentBalance"></h2>
+      <p class="sub" style="margin:4px 0 0" data-i18n="balanceHelp"></p>
+      <button class="btn block" style="margin-top:12px" id="openBalance" data-i18n="updateBalance"></button>
+    </section>
+    <section class="card">
+      <h2 class="title" data-i18n="goalSetting"></h2>
       <form class="setting-row" id="goalForm" novalidate>
-        <input id="goalInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="2000000" aria-label="Mục tiêu tháng (₩)">
-        <button class="btn primary" type="submit">Lưu</button>
+        <input id="goalInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="2000000">
+        <button class="btn primary" type="submit" data-i18n="save"></button>
       </form>
-      <p class="lbl" style="margin:8px 0 0">Tính theo số tiền thực nhận (tổng thu trừ chi phí đi kèm). Để 0 nếu không đặt.</p>
+      <p class="sub" style="margin:8px 0 0" data-i18n="goalHelp"></p>
     </section>
     <section class="card">
-      <h2 class="title">Ngân sách chi tiêu mỗi tháng</h2>
+      <h2 class="title" data-i18n="budgetSetting"></h2>
       <form class="setting-row" id="budgetForm" novalidate>
-        <input id="budgetInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="1000000" aria-label="Ngân sách tháng (₩)">
-        <button class="btn primary" type="submit">Lưu</button>
+        <input id="budgetInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="1000000">
+        <button class="btn primary" type="submit" data-i18n="save"></button>
       </form>
-      <p class="lbl" style="margin:8px 0 0">Dùng để tính mỗi ngày còn tiêu được bao nhiêu.</p>
+      <p class="sub" style="margin:8px 0 0" data-i18n="budgetHelp"></p>
     </section>
     <section class="card">
-      <h2 class="title">Giao diện</h2>
-      <div class="seg" role="group" aria-label="Chế độ màu" style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr)">
-        <button data-theme-set="system">Theo máy</button><button data-theme-set="light">Sáng</button><button data-theme-set="dark">Tối</button>
+      <h2 class="title" data-i18n="language"></h2>
+      <div class="seg" role="group" style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr)">
+        <button data-lang-set="vi">Tiếng Việt</button><button data-lang-set="en">English</button><button data-lang-set="ko">한국어</button>
+      </div>
+      <h2 class="title" style="margin-top:20px" data-i18n="theme"></h2>
+      <div class="seg" role="group" style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr)">
+        <button data-theme-set="system" data-i18n="themeSystem"></button><button data-theme-set="light" data-i18n="themeLight"></button><button data-theme-set="dark" data-i18n="themeDark"></button>
       </div>
     </section>
     <section class="card">
-      <h2 class="title">Tài khoản</h2>
-      <p style="margin:8px 0 0"><b id="userName"></b><br><span class="lbl" id="userEmail"></span></p>
-      <p class="lbl" style="margin:10px 0 0">Cài lên điện thoại: Android (Chrome) menu ⋮ → <b>Thêm vào màn hình chính</b>. iPhone (Safari) nút Chia sẻ → <b>Thêm vào MH chính</b>.</p>
+      <h2 class="title" data-i18n="account"></h2>
+      <p style="margin:8px 0 0"><b id="userName"></b><br><span class="sub" id="userEmail"></span></p>
+      <p class="sub" style="margin:10px 0 0" data-i18n="installHelp"></p>
     </section>
-    <button class="btn block danger" id="logout">Đăng xuất</button>
+    <button class="btn block danger" id="logout" data-i18n="logout"></button>
   </main>
 
   <div class="dock">
     <div class="dock-in">
-      <nav class="nav" aria-label="Điều hướng">
+      <nav class="nav">
         <span class="nav-ind" id="navInd" aria-hidden="true"></span>
         <button class="tab" data-go="home" aria-current="page">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Tổng quan</button>
-      <button class="tab" data-go="history">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Lịch sử</button>
-      <button class="tab" data-go="settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Cài đặt</button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n="tabHome"></span></button>
+        <button class="tab" data-go="history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span data-i18n="tabHistory"></span></button>
+        <button class="tab" data-go="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg><span data-i18n="tabSettings"></span></button>
       </nav>
-      <button class="fab" id="fab" aria-label="Ghi khoản mới">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="fab" id="fab" data-i18n-aria="addNew">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
     </div>
   </div>
 </div>
@@ -470,180 +537,374 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
 <div class="scrim" id="scrim"></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
   <div class="grip"></div>
-  <div class="sheet-head"><h2 id="sheetTitle">Ghi khoản mới</h2><button class="x" id="closeSheet" aria-label="Đóng">✕</button></div>
+  <div class="sheet-head"><h2 id="sheetTitle"></h2><button class="x" data-close data-i18n-aria="close">✕</button></div>
   <form id="txForm" novalidate>
-    <div class="typeseg" role="group" aria-label="Loại">
-      <button type="button" id="tInc" aria-pressed="true">Khoản thu</button>
-      <button type="button" id="tExp" aria-pressed="false">Khoản chi</button>
+    <div class="typeseg" role="group">
+      <button type="button" id="tInc" aria-pressed="true" data-i18n="income"></button>
+      <button type="button" id="tExp" aria-pressed="false" data-i18n="expense"></button>
     </div>
-    <div class="lbl" style="text-align:center" id="amountLabel">Tổng thu</div>
-    <div class="amt-in"><input id="amount" type="number" min="1" step="100" inputmode="numeric" placeholder="0" aria-label="Số tiền"><span>₩</span></div>
-    <div class="quick" id="amountChips">
-      <button type="button" class="chip" data-add="1000">+1.000</button>
-      <button type="button" class="chip" data-add="10000">+10.000</button>
-      <button type="button" class="chip" data-add="50000">+50.000</button>
-      <button type="button" class="chip" data-add="100000">+100.000</button>
+    <div class="lbl" style="text-align:center" id="amountLabel"></div>
+    <div class="amt-in"><input id="amount" type="number" min="1" step="100" inputmode="numeric" placeholder="0"><span>₩</span></div>
+    <div class="quick">
+      <button type="button" class="chip" data-add="1000">+1,000</button>
+      <button type="button" class="chip" data-add="10000">+10,000</button>
+      <button type="button" class="chip" data-add="50000">+50,000</button>
+      <button type="button" class="chip" data-add="100000">+100,000</button>
     </div>
-
     <div class="costbox" id="costBox">
-      <label class="lbl" for="cost">Chi phí đi kèm (xăng xe, phí nền tảng, nguyên liệu…)</label>
+      <label class="lbl" for="cost" data-i18n="costLabel"></label>
       <div class="row"><input id="cost" type="number" min="0" step="100" inputmode="numeric" placeholder="0"><span class="muted">₩</span></div>
       <div class="quick">
-        <button type="button" class="chip" data-cost="3000">⛽ +3.000</button>
-        <button type="button" class="chip" data-cost="5000">⛽ +5.000</button>
-        <button type="button" class="chip" data-cost="10000">+10.000</button>
-        <button type="button" class="chip" data-cost-reset>Xóa</button>
+        <button type="button" class="chip" data-cost="3000">⛽ +3,000</button>
+        <button type="button" class="chip" data-cost="5000">⛽ +5,000</button>
+        <button type="button" class="chip" data-cost="10000">+10,000</button>
+        <button type="button" class="chip" data-cost-reset data-i18n="clear"></button>
       </div>
-      <div class="netline"><span class="lbl">Thực nhận</span><span class="num" id="netPreview">0₩</span></div>
+      <div class="netline"><span class="lbl" data-i18n="netReceived"></span><span class="num" id="netPreview">0₩</span></div>
     </div>
-
     <div class="catgrid" id="catgrid"></div>
     <div class="row2">
-      <div class="field"><label class="lbl" for="date">Ngày</label><input id="date" type="date"></div>
-      <div class="field"><label class="lbl" for="memo">Tên nguồn thu / ghi chú</label><input id="memo" maxlength="100" placeholder="Không bắt buộc"></div>
+      <div class="field"><label class="lbl" for="date" data-i18n="date"></label><input id="date" type="date"></div>
+      <div class="field"><label class="lbl" for="memo" data-i18n="memo"></label><input id="memo" maxlength="100" data-i18n-ph="optional"></div>
     </div>
     <p class="error" id="txError"></p>
     <div class="actions single" id="actions">
-      <button type="button" class="btn danger" id="deleteTx" hidden>Xóa</button>
-      <button class="btn primary block" type="submit" id="txSubmit">Lưu</button>
+      <button type="button" class="btn danger" id="deleteTx" hidden></button>
+      <button class="btn primary block" type="submit" id="txSubmit" data-i18n="save"></button>
     </div>
   </form>
 </section>
 
+<!-- ========== BẢNG NHẬP SỐ DƯ ========== -->
+<section class="sheet" id="balSheet" role="dialog" aria-modal="true" aria-labelledby="balTitle" aria-hidden="true">
+  <div class="grip"></div>
+  <div class="sheet-head"><h2 id="balTitle" data-i18n="currentBalance"></h2><button class="x" data-close data-i18n-aria="close">✕</button></div>
+  <form id="balForm" novalidate>
+    <p class="sub" style="margin:0 0 6px;text-align:center" data-i18n="balanceHelp"></p>
+    <div class="bal-in"><input id="balInput" type="number" step="100" inputmode="numeric" placeholder="0"><span class="muted" style="font-size:1.4rem">₩</span></div>
+    <div class="quick">
+      <button type="button" class="chip" data-bal="100000">+100,000</button>
+      <button type="button" class="chip" data-bal="1000000">+1,000,000</button>
+      <button type="button" class="chip" data-bal-reset data-i18n="clear"></button>
+    </div>
+    <p class="error" id="balError"></p>
+    <button class="btn primary block" type="submit" data-i18n="save"></button>
+  </form>
+</section>
+
+<canvas id="confetti" hidden></canvas>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-// ===================== Cấu hình =====================
-const EXP_CATS = [
-  ["Ăn uống","🍜"],["Tiền phòng (월세)","🏠"],["관리비 / điện nước gas","💡"],["Điện thoại","📱"],
-  ["Đi lại / xăng xe","⛽"],["Học phí & sách","📚"],["Visa / bảo hiểm","🛂"],["Gửi tiền về nhà","💌"],
-  ["Mua sắm","🛍️"],["Giải trí","🎮"],["Khác","•"]
-];
-const INC_CATS = [
-  ["Lương cứng","💼"],["Ca làm thêm","⏱️"],["Thưởng","🎁"],["Chạy xe / giao hàng","🛵"],
-  ["Lương làm thêm","🧾"],["Gia đình gửi","👪"],["Học bổng","🎓"],["Khác","•"]
-];
-const ICON = Object.fromEntries([...EXP_CATS, ...INC_CATS]);
+// ============================ NGÔN NGỮ ============================
+const I18N = {
+  vi: {
+    appName:"Sổ Chi Tiêu Du Học", tagline:"Biết chính xác mình thực nhận bao nhiêu, và mỗi ngày còn tiêu được bao nhiêu.",
+    or:"hoặc dùng email", displayName:"Tên hiển thị", password:"Mật khẩu", login:"Đăng nhập", createAccount:"Tạo tài khoản",
+    noAccount:"Chưa có tài khoản?", haveAccount:"Đã có tài khoản?", register:"Đăng ký",
+    morning:"Chào buổi sáng ☀️", afternoon:"Chào buổi chiều 🌤️", evening:"Chào buổi tối 🌙",
+    historyTitle:"Lịch sử giao dịch", settingsTitle:"Cài đặt", streak:"🔥 {n} ngày ghi liên tục",
+    prevMonth:"Tháng trước", nextMonth:"Tháng sau",
+    currentBalance:"Số dư hiện tại", setBalance:"+ Nhập số dư", netThisMonth:"Thực nhận tháng này",
+    grossIncome:"Tổng thu", incomeCost:"Chi phí đi kèm", leftThisMonth:"Còn lại",
+    monthlyGoal:"Mục tiêu tháng", edit:"Sửa", setGoalTitle:"Đặt mục tiêu thu nhập tháng", setGoalSub:"Xem còn thiếu bao nhiêu để đạt mục tiêu", setNow:"Đặt ngay",
+    goalRemain:"Còn thiếu {x} để đạt mục tiêu", goalDone:"🎉 Đã đạt mục tiêu tháng!",
+    quickAdd:"Nhập nhanh", quickAddSub:"Chạm 1 lần để ghi", netIncomeChart:"Thu nhập thực nhận", days7:"7 ngày", month:"Tháng",
+    last7:"7 ngày gần nhất", heatSub:"Lịch nhiệt theo ngày", less:"Ít", more:"Nhiều", today:"Nay",
+    note7:"7 ngày: {x} · cao nhất {d}", note7Empty:"Chưa có thu nhập trong 7 ngày này. Ghi một khoản thu để biểu đồ hiện lên.",
+    noteMonth:"Có thu nhập {n} ngày · ngày cao nhất {d} ({x})", noteMonthEmpty:"Chưa có thu nhập trong tháng này.",
+    spendByCat:"Chi tiêu theo danh mục", spent:"Đã chi", noSpend:"Chưa có khoản chi nào tháng này.",
+    budgetOf:"{a} / {b} ngân sách", perDay:"Mỗi ngày còn tiêu được ({n} ngày)", overBudget:"Đã vượt ngân sách", used:"Đã dùng",
+    recent:"Giao dịch gần đây", seeAll:"Xem tất cả", netReceived:"Thực nhận", expenseLbl:"Khoản chi",
+    emptyTitle:"Tháng này còn trống", emptySub:"Ghi khoản thu hoặc chi đầu tiên để xem thực nhận, biểu đồ và tiến độ mục tiêu.", emptyCta:"Ghi khoản đầu tiên",
+    todayLbl:"Hôm nay", yesterday:"Hôm qua",
+    balanceHelp:"Nhập số tiền bạn đang có (ví dụ trong tài khoản ngân hàng). Từ đó app tự cộng/trừ mỗi khi bạn ghi khoản thu chi.",
+    updateBalance:"Cập nhật số dư hiện tại", goalSetting:"Mục tiêu thu nhập thực nhận mỗi tháng", goalHelp:"Tính theo tiền thực nhận (tổng thu trừ chi phí đi kèm). Để 0 nếu không đặt.",
+    budgetSetting:"Ngân sách chi tiêu mỗi tháng", budgetHelp:"Dùng để tính mỗi ngày còn tiêu được bao nhiêu.", save:"Lưu",
+    language:"Ngôn ngữ", theme:"Giao diện", themeSystem:"Theo máy", themeLight:"Sáng", themeDark:"Tối", account:"Tài khoản",
+    installHelp:"Cài lên điện thoại: Android (Chrome) menu ⋮ → Thêm vào màn hình chính. iPhone (Safari) nút Chia sẻ → Thêm vào MH chính.",
+    logout:"Đăng xuất", tabHome:"Tổng quan", tabHistory:"Lịch sử", tabSettings:"Cài đặt", addNew:"Ghi khoản mới", close:"Đóng",
+    newTx:"Ghi khoản mới", editTx:"Sửa giao dịch", income:"Khoản thu", expense:"Khoản chi", grossLbl:"Tổng thu", spendAmt:"Số tiền chi",
+    costLabel:"Chi phí đi kèm (xăng xe, phí nền tảng, nguyên liệu…)", clear:"Xóa", date:"Ngày", memo:"Tên nguồn thu / ghi chú", optional:"Không bắt buộc",
+    delete:"Xóa", confirmDelete:"Chắc chắn xóa?",
+    tSaved:"Thực nhận +{x}", tSpent:"Đã ghi −{x}", tUpdated:"Đã cập nhật", tDeleted:"Đã xóa", tBalance:"Đã lưu số dư", tGoal:"Đã lưu mục tiêu", tBudget:"Đã lưu ngân sách",
+    errAmount:"Vui lòng nhập số tiền lớn hơn 0", errCost:"Chi phí đi kèm không được lớn hơn tổng thu", errDate:"Vui lòng chọn ngày",
+    errEmail:"Vui lòng nhập email hợp lệ", errPassword:"Mật khẩu cần từ 6 ký tự", errName:"Vui lòng nhập tên hiển thị",
+    errBadLogin:"Email hoặc mật khẩu không đúng", errTaken:"Email này đã được đăng ký", errNetwork:"Không kết nối được server. Nếu vừa mở app, đợi khoảng 1 phút rồi thử lại.",
+    errSession:"Phiên đăng nhập đã hết, vui lòng đăng nhập lại.", errGoogle:"Đăng nhập Google không thành công, vui lòng thử lại.", errBalance:"Vui lòng nhập số dư", hideAmounts:"Ẩn số tiền", showAmounts:"Hiện số tiền"
+  },
+  en: {
+    appName:"Student Money Book", tagline:"Know exactly what you take home, and how much you can still spend each day.",
+    or:"or use email", displayName:"Display name", password:"Password", login:"Log in", createAccount:"Create account",
+    noAccount:"No account yet?", haveAccount:"Already have an account?", register:"Sign up",
+    morning:"Good morning ☀️", afternoon:"Good afternoon 🌤️", evening:"Good evening 🌙",
+    historyTitle:"Transactions", settingsTitle:"Settings", streak:"🔥 {n}-day logging streak",
+    prevMonth:"Previous month", nextMonth:"Next month",
+    currentBalance:"Current balance", setBalance:"+ Add balance", netThisMonth:"Net income this month",
+    grossIncome:"Gross income", incomeCost:"Related costs", leftThisMonth:"Left over",
+    monthlyGoal:"Monthly goal", edit:"Edit", setGoalTitle:"Set a monthly income goal", setGoalSub:"See how much is left to reach it", setNow:"Set now",
+    goalRemain:"{x} to go", goalDone:"🎉 Monthly goal reached!",
+    quickAdd:"Quick add", quickAddSub:"One tap to log", netIncomeChart:"Net income", days7:"7 days", month:"Month",
+    last7:"Last 7 days", heatSub:"Daily heatmap", less:"Less", more:"More", today:"Today",
+    note7:"7 days: {x} · best day {d}", note7Empty:"No income in these 7 days yet. Log some income to fill the chart.",
+    noteMonth:"Earned on {n} days · best day {d} ({x})", noteMonthEmpty:"No income this month yet.",
+    spendByCat:"Spending by category", spent:"Spent", noSpend:"No spending this month yet.",
+    budgetOf:"{a} of {b} budget", perDay:"You can spend per day ({n} days left)", overBudget:"Over budget by", used:"Used",
+    recent:"Recent transactions", seeAll:"See all", netReceived:"Take-home", expenseLbl:"Expense",
+    emptyTitle:"Nothing here yet", emptySub:"Log your first income or expense to see net income, charts and goal progress.", emptyCta:"Log the first one",
+    todayLbl:"Today", yesterday:"Yesterday",
+    balanceHelp:"Enter how much money you have right now (e.g. in your bank account). The app then adds and subtracts every transaction you log.",
+    updateBalance:"Update current balance", goalSetting:"Monthly net income goal", goalHelp:"Based on take-home pay (gross income minus related costs). Set 0 to turn off.",
+    budgetSetting:"Monthly spending budget", budgetHelp:"Used to work out how much you can spend each day.", save:"Save",
+    language:"Language", theme:"Appearance", themeSystem:"System", themeLight:"Light", themeDark:"Dark", account:"Account",
+    installHelp:"Install on your phone: Android (Chrome) menu ⋮ → Add to Home screen. iPhone (Safari) Share → Add to Home Screen.",
+    logout:"Log out", tabHome:"Home", tabHistory:"History", tabSettings:"Settings", addNew:"Add transaction", close:"Close",
+    newTx:"New transaction", editTx:"Edit transaction", income:"Income", expense:"Expense", grossLbl:"Gross amount", spendAmt:"Amount spent",
+    costLabel:"Related costs (fuel, platform fees, materials…)", clear:"Clear", date:"Date", memo:"Source / note", optional:"Optional",
+    delete:"Delete", confirmDelete:"Delete for sure?",
+    tSaved:"Take-home +{x}", tSpent:"Logged −{x}", tUpdated:"Updated", tDeleted:"Deleted", tBalance:"Balance saved", tGoal:"Goal saved", tBudget:"Budget saved",
+    errAmount:"Enter an amount greater than 0", errCost:"Related costs can't exceed the gross amount", errDate:"Pick a date",
+    errEmail:"Enter a valid email", errPassword:"Password needs at least 6 characters", errName:"Enter a display name",
+    errBadLogin:"Wrong email or password", errTaken:"This email is already registered", errNetwork:"Can't reach the server. If you just opened the app, wait about a minute and try again.",
+    errSession:"Your session expired. Please log in again.", errGoogle:"Google sign-in didn't work. Please try again.", errBalance:"Enter your balance", hideAmounts:"Hide amounts", showAmounts:"Show amounts"
+  },
+  ko: {
+    appName:"유학생 가계부", tagline:"실제로 손에 쥐는 수입과, 하루에 더 쓸 수 있는 금액을 한눈에.",
+    or:"또는 이메일로", displayName:"이름", password:"비밀번호", login:"로그인", createAccount:"회원가입",
+    noAccount:"계정이 없으신가요?", haveAccount:"이미 계정이 있으신가요?", register:"회원가입",
+    morning:"좋은 아침이에요 ☀️", afternoon:"좋은 오후예요 🌤️", evening:"좋은 저녁이에요 🌙",
+    historyTitle:"거래 내역", settingsTitle:"설정", streak:"🔥 {n}일 연속 기록 중",
+    prevMonth:"이전 달", nextMonth:"다음 달",
+    currentBalance:"현재 잔액", setBalance:"+ 잔액 입력", netThisMonth:"이번 달 실수령액",
+    grossIncome:"총수입", incomeCost:"부대비용", leftThisMonth:"남은 돈",
+    monthlyGoal:"이번 달 목표", edit:"수정", setGoalTitle:"월 수입 목표 설정", setGoalSub:"목표까지 얼마 남았는지 확인하세요", setNow:"설정하기",
+    goalRemain:"목표까지 {x} 남음", goalDone:"🎉 이번 달 목표 달성!",
+    quickAdd:"빠른 입력", quickAddSub:"한 번 탭으로 기록", netIncomeChart:"실수령 수입", days7:"7일", month:"월간",
+    last7:"최근 7일", heatSub:"일별 히트맵", less:"적음", more:"많음", today:"오늘",
+    note7:"7일 합계: {x} · 최고 {d}", note7Empty:"최근 7일간 수입이 없어요. 수입을 기록하면 그래프가 채워져요.",
+    noteMonth:"수입 있는 날 {n}일 · 최고 {d} ({x})", noteMonthEmpty:"이번 달 수입이 아직 없어요.",
+    spendByCat:"카테고리별 지출", spent:"지출", noSpend:"이번 달 지출이 아직 없어요.",
+    budgetOf:"예산 {b} 중 {a}", perDay:"하루 사용 가능 금액 ({n}일 남음)", overBudget:"예산 초과", used:"사용",
+    recent:"최근 거래", seeAll:"전체 보기", netReceived:"실수령", expenseLbl:"지출",
+    emptyTitle:"아직 기록이 없어요", emptySub:"첫 수입이나 지출을 기록하면 실수령액, 그래프, 목표 진행률을 볼 수 있어요.", emptyCta:"첫 기록 남기기",
+    todayLbl:"오늘", yesterday:"어제",
+    balanceHelp:"지금 가진 금액(예: 통장 잔액)을 입력하세요. 이후 기록하는 수입과 지출이 자동으로 더하고 빼져요.",
+    updateBalance:"현재 잔액 수정", goalSetting:"월 실수령 수입 목표", goalHelp:"실수령액(총수입 − 부대비용) 기준이에요. 0이면 목표를 끕니다.",
+    budgetSetting:"월 지출 예산", budgetHelp:"하루에 쓸 수 있는 금액을 계산할 때 사용해요.", save:"저장",
+    language:"언어", theme:"화면 모드", themeSystem:"시스템", themeLight:"라이트", themeDark:"다크", account:"계정",
+    installHelp:"휴대폰에 설치: Android(Chrome) 메뉴 ⋮ → 홈 화면에 추가. iPhone(Safari) 공유 → 홈 화면에 추가.",
+    logout:"로그아웃", tabHome:"홈", tabHistory:"내역", tabSettings:"설정", addNew:"새 거래 추가", close:"닫기",
+    newTx:"새 거래", editTx:"거래 수정", income:"수입", expense:"지출", grossLbl:"총수입", spendAmt:"지출 금액",
+    costLabel:"부대비용 (주유비, 플랫폼 수수료, 재료비…)", clear:"지우기", date:"날짜", memo:"수입처 / 메모", optional:"선택 사항",
+    delete:"삭제", confirmDelete:"정말 삭제할까요?",
+    tSaved:"실수령 +{x}", tSpent:"지출 −{x} 기록", tUpdated:"수정했어요", tDeleted:"삭제했어요", tBalance:"잔액을 저장했어요", tGoal:"목표를 저장했어요", tBudget:"예산을 저장했어요",
+    errAmount:"0보다 큰 금액을 입력하세요", errCost:"부대비용은 총수입보다 클 수 없어요", errDate:"날짜를 선택하세요",
+    errEmail:"올바른 이메일을 입력하세요", errPassword:"비밀번호는 6자 이상이어야 해요", errName:"이름을 입력하세요",
+    errBadLogin:"이메일 또는 비밀번호가 올바르지 않아요", errTaken:"이미 가입된 이메일이에요", errNetwork:"서버에 연결할 수 없어요. 앱을 방금 열었다면 1분 정도 기다린 뒤 다시 시도하세요.",
+    errSession:"로그인이 만료됐어요. 다시 로그인해 주세요.", errGoogle:"Google 로그인에 실패했어요. 다시 시도해 주세요.", errBalance:"잔액을 입력하세요", hideAmounts:"금액 숨기기", showAmounts:"금액 보기"
+  }
+};
+const LOCALE = { vi: "vi-VN", en: "en-US", ko: "ko-KR" };
+const WD = { vi: ["CN","T2","T3","T4","T5","T6","T7"], en: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], ko: ["일","월","화","수","목","금","토"] };
 
-// Nút nhập nhanh: mở bảng nhập đã điền sẵn loại, danh mục, tên, và số tiền lần trước
+// Danh mục: tên lưu trong database giữ nguyên (tiếng Việt), chỉ đổi chữ hiển thị theo ngôn ngữ
+const CATS = {
+  "Ăn uống":                 { e:"🍜", c:"#F97316", en:"Food & dining",   ko:"식비" },
+  "Tiền phòng (월세)":        { e:"🏠", c:"#8B5CF6", en:"Rent",            ko:"월세" },
+  "관리비 / điện nước gas":   { e:"💡", c:"#EAB308", en:"Utilities",       ko:"관리비·공과금" },
+  "Điện thoại":              { e:"📱", c:"#06B6D4", en:"Phone",           ko:"통신비" },
+  "Đi lại / xăng xe":        { e:"⛽", c:"#3B82F6", en:"Transport & fuel", ko:"교통·주유" },
+  "Học phí & sách":          { e:"📚", c:"#6366F1", en:"Tuition & books", ko:"학비·교재" },
+  "Visa / bảo hiểm":         { e:"🛂", c:"#14B8A6", en:"Visa & insurance", ko:"비자·보험" },
+  "Gửi tiền về nhà":         { e:"💌", c:"#EC4899", en:"Money sent home", ko:"고향 송금" },
+  "Mua sắm":                 { e:"🛍️", c:"#F43F5E", en:"Shopping",        ko:"쇼핑" },
+  "Giải trí":                { e:"🎮", c:"#A855F7", en:"Entertainment",   ko:"여가" },
+  "Lương cứng":              { e:"💼", c:"#10B981", en:"Base salary",     ko:"기본급" },
+  "Ca làm thêm":             { e:"⏱️", c:"#22C55E", en:"Extra shift",     ko:"추가 근무" },
+  "Thưởng":                  { e:"🎁", c:"#F59E0B", en:"Bonus",           ko:"보너스" },
+  "Chạy xe / giao hàng":     { e:"🛵", c:"#0EA5E9", en:"Delivery rides",  ko:"배달" },
+  "Lương làm thêm":          { e:"🧾", c:"#84CC16", en:"Part-time pay",   ko:"알바비" },
+  "Gia đình gửi":            { e:"👪", c:"#F472B6", en:"From family",     ko:"가족 송금" },
+  "Học bổng":                { e:"🎓", c:"#818CF8", en:"Scholarship",     ko:"장학금" },
+  "Khác":                    { e:"✨", c:"#94A3B8", en:"Other",           ko:"기타" }
+};
+const EXP_CATS = ["Ăn uống","Tiền phòng (월세)","관리비 / điện nước gas","Điện thoại","Đi lại / xăng xe","Học phí & sách","Visa / bảo hiểm","Gửi tiền về nhà","Mua sắm","Giải trí","Khác"];
+const INC_CATS = ["Lương cứng","Ca làm thêm","Thưởng","Chạy xe / giao hàng","Lương làm thêm","Gia đình gửi","Học bổng","Khác"];
 const TEMPLATES = [
-  { id: "salary",   name: "Lương cứng",  type: "INCOME",  category: "Lương cứng",          icon: "💼", cost: false },
-  { id: "shift",    name: "Ca làm thêm", type: "INCOME",  category: "Ca làm thêm",         icon: "⏱️", cost: false },
-  { id: "bonus",    name: "Thưởng",      type: "INCOME",  category: "Thưởng",              icon: "🎁", cost: false },
-  { id: "ride",     name: "Chạy xe",     type: "INCOME",  category: "Chạy xe / giao hàng", icon: "🛵", cost: true },
-  { id: "meal",     name: "Ăn uống",     type: "EXPENSE", category: "Ăn uống",             icon: "🍜" },
-  { id: "fuel",     name: "Đổ xăng",     type: "EXPENSE", category: "Đi lại / xăng xe",    icon: "⛽" }
+  { id:"salary", type:"INCOME",  category:"Lương cứng",          cost:false, name:{vi:"Lương cứng", en:"Salary",     ko:"월급"} },
+  { id:"shift",  type:"INCOME",  category:"Ca làm thêm",         cost:false, name:{vi:"Ca làm thêm",en:"Extra shift",ko:"추가 근무"} },
+  { id:"bonus",  type:"INCOME",  category:"Thưởng",              cost:false, name:{vi:"Thưởng",     en:"Bonus",      ko:"보너스"} },
+  { id:"ride",   type:"INCOME",  category:"Chạy xe / giao hàng", cost:true,  name:{vi:"Chạy xe",    en:"Delivery",   ko:"배달"} },
+  { id:"meal",   type:"EXPENSE", category:"Ăn uống",                         name:{vi:"Ăn uống",    en:"Meal",       ko:"식사"} },
+  { id:"fuel",   type:"EXPENSE", category:"Đi lại / xăng xe",                name:{vi:"Đổ xăng",    en:"Fuel",       ko:"주유"} }
 ];
 
-// ===================== Lưu trữ cục bộ (an toàn) =====================
+// ============================ LƯU TRỮ & TRẠNG THÁI ============================
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} }
 };
+const browserLang = (navigator.language || "vi").slice(0, 2);
+let lang = store.get("sct-lang", ["vi", "en", "ko"].includes(browserLang) ? browserLang : "vi");
 let token = store.get("sct-token", null);
 let privacy = store.get("sct-privacy", false);
 let theme = store.get("sct-theme", "system");
 let tplMemory = store.get("sct-templates", {});
 
-// ===================== API =====================
+const $ = id => document.getElementById(id);
+const t = (k, vars = {}) => (I18N[lang][k] ?? I18N.vi[k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? "");
+const catName = c => lang === "vi" ? c : (CATS[c] ? CATS[c][lang] : c);
+const catIcon = c => (CATS[c] || CATS["Khác"]).e;
+const catColor = c => (CATS[c] || CATS["Khác"]).c;
+const pad = n => String(n).padStart(2, "0");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+const raw = n => Math.round(Math.abs(n)).toLocaleString("ko-KR") + "₩";
+const money = (n, sign = "") => privacy ? "*******" : sign + raw(n);
+const short = n => privacy ? "•••" : (Math.abs(n) >= 1e6 ? (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + "M" : Math.abs(n) >= 1e3 ? Math.round(n / 1e3) + "k" : String(n));
+const today = new Date();
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+const dm = d => lang === "en" ? d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) : lang === "ko" ? `${d.getMonth() + 1}/${d.getDate()}` : `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
+const netOf = i => i.type === "INCOME" ? i.amount - (i.cost || 0) : -i.amount;
+function dayLabel(iso) {
+  const d = new Date(iso + "T00:00:00");
+  if (iso === ymd(today)) return t("todayLbl");
+  if (iso === ymd(new Date(today.getTime() - 864e5))) return t("yesterday");
+  return `${WD[lang][d.getDay()]}, ${dm(d)}`;
+}
+let toastTimer;
+function toast(msg) { const el = $("toast"); el.textContent = msg; el.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2200); }
+
+// ============================ API ============================
 async function api(path, { method = "GET", body } = {}) {
-  const headers = { "Content-Type": "application/json" };
+  const headers = { "Content-Type": "application/json", "Accept-Language": lang };
   if (token) headers.Authorization = "Bearer " + token;
   let res;
   try { res = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined }); }
-  catch { throw new Error("Không kết nối được server. Nếu vừa mở app, đợi khoảng 1 phút để server khởi động rồi thử lại."); }
-  if (res.status === 401 && token) { logout(); throw new Error("Phiên đăng nhập đã hết, vui lòng đăng nhập lại."); }
+  catch { throw new Error(t("errNetwork")); }
+  if (res.status === 401 && token) { logout(); throw new Error(t("errSession")); }
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
   if (!res.ok) {
+    if (res.status === 409) throw new Error(t("errTaken"));
+    if (res.status === 401 && path.includes("/login")) throw new Error(t("errBadLogin"));
+    if (res.status === 401 && path.includes("/google")) throw new Error(t("errGoogle"));
     const fields = data && data.fields ? Object.values(data.fields) : [];
-    throw new Error(fields[0] || (data && data.message) || "Có lỗi xảy ra (" + res.status + ")");
+    throw new Error(fields[0] || (data && data.message) || "Error " + res.status);
   }
   return data;
 }
 
-// ===================== Tiện ích =====================
-const $ = id => document.getElementById(id);
-const pad = n => String(n).padStart(2, "0");
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const raw = n => Math.round(Math.abs(n)).toLocaleString("ko-KR") + "₩";
-// Mọi số tiền hiển thị đều đi qua money(): chế độ riêng tư thì thay bằng *******
-const money = (n, sign = "") => privacy ? "*******" : sign + raw(n);
-const short = n => privacy ? "•••" : (Math.abs(n) >= 1e6 ? (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + "tr" : Math.abs(n) >= 1e3 ? Math.round(n / 1e3) + "k" : String(n));
-const today = new Date();
-const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
-const WD = ["CN","T2","T3","T4","T5","T6","T7"];
-const netOf = i => i.type === "INCOME" ? i.amount - (i.cost || 0) : -i.amount;
-function dayLabel(iso) {
-  const d = new Date(iso + "T00:00:00");
-  if (iso === ymd(today)) return "Hôm nay";
-  if (iso === ymd(new Date(today.getTime() - 864e5))) return "Hôm qua";
-  return `${WD[d.getDay()]}, ${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
+// ============================ NGÔN NGỮ & GIAO DIỆN ============================
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
+  document.querySelectorAll("[data-lang-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.langSet === lang));
+  document.title = t("appName");
+  $("heatWd").innerHTML = [1, 2, 3, 4, 5, 6, 0].map(i => `<span>${WD[lang][i]}</span>`).join("");
+  setAuthMode(registerMode);
 }
-let toastTimer;
-function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200); }
+function setLang(l) {
+  lang = l; store.set("sct-lang", l); applyI18n();
+  if (!$("appView").hidden) { go(current, true); renderTemplates(); renderAll(); }
+  renderGoogleButton();
+}
+document.querySelectorAll("[data-lang-set]").forEach(b => b.onclick = () => setLang(b.dataset.langSet));
 
-// ===================== Giao diện sáng / tối =====================
 function applyTheme() {
   if (theme === "system") document.documentElement.removeAttribute("data-theme");
   else document.documentElement.setAttribute("data-theme", theme);
   document.querySelectorAll("[data-theme-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.themeSet === theme));
 }
 document.querySelectorAll("[data-theme-set]").forEach(b => b.onclick = () => { theme = b.dataset.themeSet; store.set("sct-theme", theme); applyTheme(); });
-applyTheme();
 
-// ===================== Đăng nhập =====================
+// ============================ ĐĂNG NHẬP ============================
 let registerMode = false;
 function setAuthMode(reg) {
   registerMode = reg;
-  $("authSubmit").textContent = reg ? "Tạo tài khoản" : "Đăng nhập";
-  $("switchText").textContent = reg ? "Đã có tài khoản?" : "Chưa có tài khoản?";
-  $("switchMode").textContent = reg ? "Đăng nhập" : "Đăng ký";
+  $("authSubmit").textContent = reg ? t("createAccount") : t("login");
+  $("switchText").textContent = reg ? t("haveAccount") : t("noAccount");
+  $("switchMode").textContent = reg ? t("login") : t("register");
   $("nameField").hidden = !reg;
   $("password").autocomplete = reg ? "new-password" : "current-password";
-  $("authError").textContent = "";
 }
-$("switchMode").onclick = () => setAuthMode(!registerMode);
+$("switchMode").onclick = () => { setAuthMode(!registerMode); $("authError").textContent = ""; };
 $("authForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("authSubmit"); btn.disabled = true; $("authError").textContent = "";
+  const email = $("email").value.trim(), password = $("password").value, name = $("displayName").value.trim();
+  const err = !/^\S+@\S+\.\S+$/.test(email) ? t("errEmail") : password.length < 6 ? t("errPassword") : registerMode && !name ? t("errName") : "";
+  $("authError").textContent = err; if (err) return;
+  const btn = $("authSubmit"); btn.disabled = true;
   try {
-    const body = { email: $("email").value.trim(), password: $("password").value };
-    if (registerMode) body.displayName = $("displayName").value.trim();
+    const body = registerMode ? { email, password, displayName: name } : { email, password };
     const data = await api(registerMode ? "/api/auth/register" : "/api/auth/login", { method: "POST", body });
-    token = data.token; store.set("sct-token", token); $("password").value = "";
-    await showApp();
-  } catch (err) { $("authError").textContent = err.message; }
+    await signedIn(data.token);
+  } catch (ex) { $("authError").textContent = ex.message; }
   finally { btn.disabled = false; }
 });
+async function signedIn(tok) { token = tok; store.set("sct-token", tok); $("password").value = ""; await showApp(); }
 function logout() {
   token = null; store.del("sct-token");
-  $("appView").hidden = true; $("authView").hidden = false; closeSheet(); setAuthMode(false);
+  try { window.google && google.accounts.id.disableAutoSelect(); } catch {}
+  $("appView").hidden = true; $("authView").hidden = false; closeSheets(); setAuthMode(false);
 }
 $("logout").onclick = logout;
 
-// ===================== Điều hướng =====================
+// ---- Đăng nhập bằng Google (Google Identity Services) ----
+let googleClientId = "";
+async function initGoogle() {
+  try { googleClientId = (await api("/api/auth/config")).googleClientId || ""; } catch { googleClientId = ""; }
+  if (!googleClientId) return;
+  await new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.onload = ok; s.onerror = fail;
+    document.head.appendChild(s);
+  }).catch(() => {});
+  if (!window.google) return;
+  google.accounts.id.initialize({
+    client_id: googleClientId,
+    callback: async resp => {
+      $("authError").textContent = "";
+      try { const data = await api("/api/auth/google", { method: "POST", body: { credential: resp.credential } }); await signedIn(data.token); }
+      catch (ex) { $("authError").textContent = ex.message; }
+    }
+  });
+  renderGoogleButton();
+}
+function renderGoogleButton() {
+  if (!googleClientId || !window.google) return;
+  $("googleBox").hidden = false; $("gBtn").innerHTML = "";
+  const dark = document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  google.accounts.id.renderButton($("gBtn"), {
+    type: "standard", theme: dark ? "filled_black" : "outline", size: "large", shape: "pill", text: "continue_with",
+    locale: lang, width: Math.min(352, $("gBtn").clientWidth || 352)
+  });
+}
+
+// ============================ ĐIỀU HƯỚNG ============================
 const SCREENS = { home: "homeScreen", history: "historyScreen", settings: "settingsScreen" };
 let current = "home";
-function go(name) {
+function greeting() { const h = new Date().getHours(); return h < 11 ? t("morning") : h < 17 ? t("afternoon") : t("evening"); }
+function go(name, quiet) {
   current = name;
   for (const [k, id] of Object.entries(SCREENS)) $(id).hidden = k !== name;
-  $("screenSub").textContent = name === "home" ? "Xin chào" : "";
-  $("screenTitle").textContent = name === "home" ? (me ? me.displayName : "") : name === "history" ? "Lịch sử giao dịch" : "Cài đặt";
+  $("screenSub").textContent = name === "home" ? greeting() : "";
+  $("screenTitle").textContent = name === "home" ? (me ? me.displayName : "") : name === "history" ? t("historyTitle") : t("settingsTitle");
+  $("streak").hidden = name !== "home" || !$("streak").textContent;
   $("monthNav").hidden = name === "settings";
   const tabs = [...document.querySelectorAll(".tab")];
-  tabs.forEach(t => t.dataset.go === name ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current"));
-  $("navInd").style.transform = `translateX(${Math.max(0, tabs.findIndex(t => t.dataset.go === name)) * 100}%)`;
-  const scr = $(SCREENS[name]); scr.classList.remove("enter"); void scr.offsetWidth; scr.classList.add("enter");
-  window.scrollTo(0, 0);
+  tabs.forEach(tb => tb.dataset.go === name ? tb.setAttribute("aria-current", "page") : tb.removeAttribute("aria-current"));
+  $("navInd").style.transform = `translateX(${Math.max(0, tabs.findIndex(tb => tb.dataset.go === name)) * 100}%)`;
+  if (!quiet) { const scr = $(SCREENS[name]); scr.classList.remove("enter"); void scr.offsetWidth; scr.classList.add("enter"); window.scrollTo(0, 0); }
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); });
 
-// ===================== Dữ liệu =====================
+// ============================ DỮ LIỆU ============================
 let view = new Date(today.getFullYear(), today.getMonth(), 1);
-let me = null, items = [], prevItems = [], summary = null, chartMode = "7";
+let me = null, items = [], prevItems = [], summary = null, chartMode = "7", lastGoalPct = null;
 
 async function showApp() {
   me = await api("/api/me");
@@ -653,25 +914,41 @@ async function showApp() {
   renderTemplates(); go("home");
   await load();
 }
-
 async function load() {
   const key = monthKey(view), prevKey = monthKey(new Date(view.getFullYear(), view.getMonth() - 1, 1));
-  $("monthLabel").textContent = `${pad(view.getMonth() + 1)}/${view.getFullYear()}`;
   document.body.classList.add("loading");
   try {
     const [list, prev, s] = await Promise.all([
       api("/api/transactions?month=" + key), api("/api/transactions?month=" + prevKey), api("/api/summary?month=" + key)]);
-    const byDate = (a, b) => b.date.localeCompare(a.date) || b.id - a.id;
-    items = list.sort(byDate); prevItems = prev; summary = s;
+    items = list.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id); prevItems = prev;
+    const reached = lastGoalPct !== null && lastGoalPct < 100 && (s.goalPercent ?? 0) >= 100 && s.month === summary?.month;
+    summary = s; lastGoalPct = s.goalPercent ?? 0;
     renderAll();
+    if (reached) confetti();
   } finally { document.body.classList.remove("loading"); }
 }
-
-function renderAll() { if (!summary) return; renderHero(); renderChart(); renderBudget(); renderLists(); }
+function renderAll() {
+  $("monthLabel").textContent = view.toLocaleDateString(LOCALE[lang], lang === "vi" ? { month: "2-digit", year: "numeric" } : { month: "short", year: "numeric" });
+  if (!summary) return;
+  renderHero(); renderChart(); renderSpend(); renderLists(); renderStreak();
+}
 
 // ---------- Thẻ tổng quan ----------
+let lastNet = 0, countRaf;
+function countUp(el, to) {
+  cancelAnimationFrame(countRaf);
+  const from = lastNet; lastNet = to;
+  const f = v => money(v, v < 0 ? "−" : "");
+  if (privacy || from === to || matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = f(to); return; }
+  const t0 = performance.now(), dur = 700;
+  const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = f(Math.round(from + (to - from) * e)); if (k < 1) countRaf = requestAnimationFrame(step); };
+  countRaf = requestAnimationFrame(step);
+}
 function renderHero() {
   const s = summary;
+  const set = s.currentBalance !== null && s.currentBalance !== undefined;
+  $("walletBtn").classList.toggle("unset", !set);
+  $("curBalance").textContent = set ? money(s.currentBalance, s.currentBalance < 0 ? "−" : "") : t("setBalance");
   countUp($("netIncome"), s.netIncome);
   $("income").textContent = money(s.income);
   $("incomeCost").textContent = money(s.incomeCost, s.incomeCost ? "−" : "");
@@ -684,105 +961,99 @@ function renderHero() {
     $("goalTarget").textContent = money(s.incomeGoal);
     $("goalPct").textContent = pct + "%";
     $("goalBar").style.width = Math.min(pct, 100) + "%";
-    $("goalRemain").innerHTML = s.goalRemaining > 0
-      ? `Còn thiếu <b class="num" style="color:var(--hero-fg)">${money(s.goalRemaining)}</b> để đạt mục tiêu`
-      : `🎉 Đã đạt mục tiêu tháng!`;
+    $("goalRemain").innerHTML = s.goalRemaining > 0 ? t("goalRemain", { x: `<b class="num" style="color:var(--hero-fg)">${money(s.goalRemaining)}</b>` }) : t("goalDone");
   }
 }
-
-// Hiệu ứng số chạy lên cho con số chính
-let lastNet = 0, countRaf;
-function countUp(el, to) {
-  cancelAnimationFrame(countRaf);
-  const from = lastNet; lastNet = to;
-  const fmtN = v => money(v, v < 0 ? "−" : "");
-  if (privacy || from === to || matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = fmtN(to); return; }
-  const t0 = performance.now(), dur = 700;
-  const step = t => {
-    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-    el.textContent = fmtN(Math.round(from + (to - from) * e));
-    if (k < 1) countRaf = requestAnimationFrame(step);
-  };
-  countRaf = requestAnimationFrame(step);
+function renderStreak() {
+  const days = new Set([...items, ...prevItems].map(i => i.date));
+  let n = 0; const d = new Date(today);
+  if (!days.has(ymd(d))) d.setDate(d.getDate() - 1); // hôm nay chưa ghi thì vẫn giữ chuỗi tới hôm qua
+  while (days.has(ymd(d))) { n++; d.setDate(d.getDate() - 1); }
+  $("streak").textContent = n >= 2 ? t("streak", { n }) : "";
+  $("streak").hidden = current !== "home" || n < 2;
 }
 
-// ---------- Biểu đồ ----------
-function dailyNetIncome(list) {
-  const m = {};
-  list.forEach(i => { if (i.type === "INCOME") m[i.date] = (m[i.date] || 0) + i.amount - (i.cost || 0); });
-  return m;
-}
+// ---------- Biểu đồ thu nhập ----------
+function dailyNet(list) { const m = {}; list.forEach(i => { if (i.type === "INCOME") m[i.date] = (m[i.date] || 0) + i.amount - (i.cost || 0); }); return m; }
 function renderChart() {
-  $("view7").setAttribute("aria-pressed", chartMode === "7");
-  $("viewMonth").setAttribute("aria-pressed", chartMode === "month");
+  $("view7").setAttribute("aria-pressed", chartMode === "7"); $("viewMonth").setAttribute("aria-pressed", chartMode === "month");
   $("chart7").hidden = chartMode !== "7"; $("chartMonth").hidden = chartMode !== "month";
-  $("chartSub").textContent = chartMode === "7" ? "7 ngày gần nhất" : "Lịch nhiệt theo ngày";
-  const daily = dailyNetIncome([...items, ...prevItems]);
-
+  $("chartSub").textContent = chartMode === "7" ? t("last7") : t("heatSub");
+  const daily = dailyNet([...items, ...prevItems]);
   if (chartMode === "7") {
-    // 7 ngày kết thúc ở hôm nay (tháng hiện tại) hoặc ngày cuối của tháng đang xem
     const isCur = monthKey(view) === monthKey(today);
     const end = isCur ? new Date(today) : new Date(view.getFullYear(), view.getMonth() + 1, 0);
     const days = [...Array(7)].map((_, k) => { const d = new Date(end); d.setDate(end.getDate() - 6 + k); return d; });
     const vals = days.map(d => Math.max(0, daily[ymd(d)] || 0));
-    const max = Math.max(...vals), topIdx = max > 0 ? vals.indexOf(max) : -1;
+    const max = Math.max(...vals), top = max > 0 ? vals.indexOf(max) : -1, ph = [35, 55, 40, 70, 50, 85, 60];
     $("chart7").classList.toggle("empty-chart", max === 0);
-    const ph = [35, 55, 40, 70, 50, 85, 60];
-    $("chart7").innerHTML = days.map((d, k) => `<div class="barcol${k === topIdx ? " top" : ""}${ymd(d) === ymd(today) ? " today" : ""}">
+    $("chart7").innerHTML = days.map((d, k) => `<div class="barcol${k === top ? " top" : ""}${ymd(d) === ymd(today) ? " today" : ""}">
       <span class="v num">${vals[k] ? short(vals[k]) : ""}</span>
       <span class="b" style="height:${max ? Math.max(4, vals[k] / max * 100) : ph[k]}%;animation-delay:${k * 40}ms"></span>
-      <span class="d">${ymd(d) === ymd(today) ? "Nay" : WD[d.getDay()]}</span></div>`).join("");
-    const total = vals.reduce((a, b) => a + b, 0);
+      <span class="d">${ymd(d) === ymd(today) ? t("today") : WD[lang][d.getDay()]}</span></div>`).join("");
     $("chartNote").innerHTML = max > 0
-      ? `7 ngày: <b class="num">${money(total)}</b> · cao nhất <b>${WD[days[topIdx].getDay()]} ${pad(days[topIdx].getDate())}/${pad(days[topIdx].getMonth() + 1)}</b>`
-      : "Chưa có thu nhập trong 7 ngày này. Ghi một khoản thu để biểu đồ hiện lên.";
+      ? t("note7", { x: `<b class="num">${money(vals.reduce((a, b) => a + b, 0))}</b>`, d: `<b>${WD[lang][days[top].getDay()]} ${dm(days[top])}</b>` })
+      : t("note7Empty");
   } else {
     const y = view.getFullYear(), m = view.getMonth(), n = new Date(y, m + 1, 0).getDate();
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7; // tuần bắt đầu từ T2
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
     const vals = [...Array(n)].map((_, k) => Math.max(0, daily[`${y}-${pad(m + 1)}-${pad(k + 1)}`] || 0));
-    const max = Math.max(...vals);
-    const level = v => !v ? 0 : Math.min(4, Math.ceil(v / max * 4));
+    const max = Math.max(...vals), level = v => !v ? 0 : Math.min(4, Math.ceil(v / max * 4));
     $("heat").innerHTML = '<span class="c pad"></span>'.repeat(offset) + vals.map((v, k) => {
       const iso = `${y}-${pad(m + 1)}-${pad(k + 1)}`;
-      return `<span class="c${iso === ymd(today) ? " today" : ""}" data-l="${level(v)}" title="${pad(k + 1)}/${pad(m + 1)}: ${privacy ? "ẩn" : raw(v)}">${k + 1}</span>`;
+      return `<span class="c${iso === ymd(today) ? " today" : ""}" data-l="${level(v)}" title="${privacy ? "" : raw(v)}">${k + 1}</span>`;
     }).join("");
-    const best = max > 0 ? vals.indexOf(max) + 1 : 0;
-    const active = vals.filter(Boolean).length;
+    const best = vals.indexOf(max);
     $("chartNote").innerHTML = max > 0
-      ? `Có thu nhập <b>${active}</b> ngày · ngày cao nhất <b>${pad(best)}/${pad(m + 1)}</b> (<span class="num">${money(max)}</span>)`
-      : "Chưa có thu nhập trong tháng này.";
+      ? t("noteMonth", { n: `<b>${vals.filter(Boolean).length}</b>`, d: `<b>${dm(new Date(y, m, best + 1))}</b>`, x: `<span class="num">${money(max)}</span>` })
+      : t("noteMonthEmpty");
   }
 }
 $("view7").onclick = () => { chartMode = "7"; renderChart(); };
 $("viewMonth").onclick = () => { chartMode = "month"; renderChart(); };
 
-// ---------- Ngân sách ----------
-function renderBudget() {
-  const s = summary;
-  $("budgetCard").hidden = !s.budget;
+// ---------- Chi tiêu theo danh mục (biểu đồ tròn) + ngân sách ----------
+function renderSpend() {
+  const s = summary, cats = s.expenseByCategory || [];
+  const R = 52, C = 2 * Math.PI * R;
+  $("donutTotal").textContent = money(s.expense);
+  if (!cats.length) {
+    $("donutSvg").innerHTML = `<circle cx="65" cy="65" r="${R}" stroke="var(--card-2)" stroke-dasharray="4 6"></circle>`;
+    $("donutLegend").innerHTML = `<span class="sub">${t("noSpend")}</span>`;
+  } else {
+    let acc = 0;
+    const top = cats.slice(0, 5), rest = cats.slice(5).reduce((a, c) => a + c.total, 0);
+    const segs = top.map(c => ({ name: catName(c.category), color: catColor(c.category), v: c.total }));
+    if (rest) segs.push({ name: catName("Khác"), color: catColor("Khác"), v: rest });
+    $("donutSvg").innerHTML = `<circle cx="65" cy="65" r="${R}" stroke="var(--card-2)"></circle>` + segs.map(sg => {
+      const len = sg.v / s.expense * C, gap = segs.length > 1 ? Math.min(3, len / 3) : 0;
+      const el = `<circle cx="65" cy="65" r="${R}" stroke="${sg.color}" stroke-dasharray="${Math.max(0, len - gap)} ${C}" stroke-dashoffset="${-acc}" stroke-linecap="round"></circle>`;
+      acc += len; return el;
+    }).join("");
+    $("donutLegend").innerHTML = segs.map(sg => `<div class="lg"><i style="background:${sg.color}"></i><span>${esc(sg.name)}</span><span class="num">${privacy ? "•••" : Math.round(sg.v / s.expense * 100) + "%"}</span></div>`).join("");
+  }
+  $("budgetBlock").hidden = !s.budget;
+  $("budgetPct").textContent = s.budget && !privacy ? t("budgetOf", { a: raw(s.expense), b: raw(s.budget) }) : "";
   if (!s.budget) return;
   const pct = s.budgetUsedPercent ?? 0, bar = $("budgetBar");
   bar.className = "bar" + (pct > 100 ? " over" : pct > 80 ? " near" : "");
   bar.firstElementChild.style.width = Math.min(pct, 100) + "%";
-  $("budgetPct").textContent = privacy ? "" : `${money(s.expense)} / ${money(s.budget)}`;
   if (s.daysLeft) {
     const over = s.expense > s.budget;
-    $("dailyLabel").textContent = over ? "Đã vượt ngân sách" : `Mỗi ngày còn tiêu được (${s.daysLeft} ngày)`;
+    $("dailyLabel").textContent = over ? t("overBudget") : t("perDay", { n: s.daysLeft });
     $("dailyLimit").textContent = money(over ? s.expense - s.budget : s.dailyLimit);
     $("dailyLimit").className = "num" + (over ? " exp" : "");
-  } else {
-    $("dailyLabel").textContent = "Đã dùng"; $("dailyLimit").textContent = pct + "%"; $("dailyLimit").className = "num";
-  }
+  } else { $("dailyLabel").textContent = t("used"); $("dailyLimit").textContent = pct + "%"; $("dailyLimit").className = "num"; }
 }
 
-// ---------- Danh sách ----------
+// ---------- Danh sách giao dịch ----------
 function txRow(i) {
-  const inc = i.type === "INCOME", cost = i.cost || 0;
+  const inc = i.type === "INCOME", cost = i.cost || 0, col = catColor(i.category);
   const sub = inc && cost
     ? `<span class="sub num">${money(i.amount)} <span class="exp">−${privacy ? "***" : raw(cost)}</span></span>`
-    : `<span class="sub">${inc ? "Thực nhận" : "Khoản chi"}</span>`;
-  return `<button class="tx${inc ? " in" : ""}" data-id="${i.id}"><span class="ic">${ICON[i.category] || "•"}</span>
-    <span class="t"><b>${esc(i.memo || i.category)}</b><span class="lbl">${esc(i.category)}</span></span>
+    : `<span class="sub">${inc ? t("netReceived") : t("expenseLbl")}</span>`;
+  return `<button class="tx${inc ? " in" : ""}" data-id="${i.id}"><span class="ic" style="background:${col}22">${catIcon(i.category)}</span>
+    <span class="t"><b>${esc(i.memo || catName(i.category))}</b><span class="lbl">${esc(catName(i.category))}</span></span>
     <span class="r"><span class="num amt ${inc ? "inc" : "exp"}">${money(inc ? i.amount - cost : i.amount, inc ? "+" : "−")}</span>${sub}</span></button>`;
 }
 const EMPTY_ART = `<svg class="float" viewBox="0 0 132 104" fill="none" aria-hidden="true">
@@ -793,65 +1064,63 @@ const EMPTY_ART = `<svg class="float" viewBox="0 0 132 104" fill="none" aria-hid
   <rect x="42" y="56" width="40" height="5" rx="2.5" fill="currentColor" opacity=".14"/>
   <rect x="42" y="68" width="26" height="5" rx="2.5" fill="currentColor" opacity=".14"/>
   <circle cx="98" cy="24" r="13" fill="var(--income)"/><path d="M98 18v12M92 24h12" stroke="var(--on-income)" stroke-width="2.6" stroke-linecap="round"/>
-  <path d="M20 40l3 3m0-3l-3 3M112 64l2.5 2.5m0-2.5L112 66.5" stroke="var(--income)" stroke-width="1.6" stroke-linecap="round"/>
-  <circle cx="22" cy="70" r="2.5" fill="var(--income)" opacity=".6"/><circle cx="116" cy="44" r="2" fill="var(--income)" opacity=".5"/>
+  <path d="M20 40l3 3m0-3l-3 3M112 64l2.5 2.5m0-2.5L112 66.5" stroke="#F59E0B" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="22" cy="70" r="2.5" fill="#22D3EE"/><circle cx="116" cy="44" r="2" fill="#A78BFA"/>
 </svg>`;
-const EMPTY = `<div class="empty" style="color:var(--fg)">${EMPTY_ART}
-  <p class="title" style="margin:0">Tháng này còn trống</p>
-  <p class="sub" style="margin:0">Ghi khoản thu hoặc chi đầu tiên để xem thực nhận, biểu đồ và tiến độ mục tiêu.</p>
-  <button class="btn primary" data-open-sheet>Ghi khoản đầu tiên</button></div>`;
+const emptyHtml = () => `<div class="empty" style="color:var(--fg)">${EMPTY_ART}<p class="title" style="margin:0">${t("emptyTitle")}</p>
+  <p class="sub" style="margin:0">${t("emptySub")}</p><button class="btn primary" data-open-sheet>${t("emptyCta")}</button></div>`;
 function renderLists() {
-  $("recent").innerHTML = items.length ? items.slice(0, 5).map(txRow).join("") : EMPTY;
-  if (!items.length) { $("history").innerHTML = `<div class="list">${EMPTY}</div>`; return; }
-  const groups = {};
-  items.forEach(i => (groups[i.date] ||= []).push(i));
+  $("recent").innerHTML = items.length ? items.slice(0, 5).map(txRow).join("") : emptyHtml();
+  if (!items.length) { $("history").innerHTML = `<div class="list">${emptyHtml()}</div>`; return; }
+  const groups = {}; items.forEach(i => (groups[i.date] ||= []).push(i));
   $("history").innerHTML = Object.entries(groups).map(([d, arr]) => {
     const net = arr.reduce((s, i) => s + netOf(i), 0);
     return `<div class="day-group"><div class="day"><span class="eyebrow">${dayLabel(d)}</span><span class="num lbl">${money(net, net >= 0 ? "+" : "−")}</span></div>
       <div class="list">${arr.map(txRow).join("")}</div></div>`;
   }).join("");
 }
+$("prev").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); load().catch(ex => toast(ex.message)); };
+$("next").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); load().catch(ex => toast(ex.message)); };
 
-$("prev").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); load().catch(err => toast(err.message)); };
-$("next").onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); load().catch(err => toast(err.message)); };
-
-// ===================== Chế độ riêng tư =====================
+// ============================ RIÊNG TƯ ============================
 function applyPrivacy() {
   $("eyeOpen").toggleAttribute("hidden", privacy); $("eyeClosed").toggleAttribute("hidden", !privacy);
   $("eyeBtn").setAttribute("aria-pressed", privacy);
-  $("eyeBtn").setAttribute("aria-label", privacy ? "Hiện số tiền" : "Ẩn số tiền");
-  renderAll(); renderTemplates();
+  $("eyeBtn").setAttribute("aria-label", privacy ? t("showAmounts") : t("hideAmounts"));
 }
-$("eyeBtn").onclick = () => { privacy = !privacy; store.set("sct-privacy", privacy); applyPrivacy(); };
+$("eyeBtn").onclick = () => { privacy = !privacy; store.set("sct-privacy", privacy); applyPrivacy(); renderAll(); renderTemplates(); };
 
-// ===================== Nhập nhanh =====================
+// ============================ NHẬP NHANH ============================
 function renderTemplates() {
-  $("templates").innerHTML = TEMPLATES.map(t => {
-    const last = tplMemory[t.id];
-    const hint = last ? money(last.amount) : (t.type === "INCOME" ? "Khoản thu" : "Khoản chi");
-    return `<button class="tpl${t.type === "EXPENSE" ? " out" : ""}" data-tpl="${t.id}"><span class="e">${t.icon}</span>
-      <span><b>${esc(t.name)}</b><span class="lbl num">${hint}</span></span></button>`;
+  $("templates").innerHTML = TEMPLATES.map(tp => {
+    const last = tplMemory[tp.id], col = catColor(tp.category);
+    return `<button class="tpl" data-tpl="${tp.id}"><span class="e" style="background:${col}26">${catIcon(tp.category)}</span>
+      <span><b>${esc(tp.name[lang])}</b><span class="lbl num">${last ? money(last.amount) : (tp.type === "INCOME" ? t("income") : t("expense"))}</span></span></button>`;
   }).join("");
 }
 $("templates").onclick = e => {
   const b = e.target.closest("[data-tpl]"); if (!b) return;
-  const t = TEMPLATES.find(x => x.id === b.dataset.tpl), last = tplMemory[t.id] || {};
-  openSheet(null, { type: t.type, category: t.category, memo: t.name, amount: last.amount || "", cost: last.cost || "", tplId: t.id, focusCost: t.cost && !!last.amount });
+  const tp = TEMPLATES.find(x => x.id === b.dataset.tpl), last = tplMemory[tp.id] || {};
+  openTx(null, { type: tp.type, category: tp.category, memo: tp.name[lang], amount: last.amount || "", cost: last.cost || "", tplId: tp.id, focusCost: tp.cost && !!last.amount });
 };
 
-// ===================== Bảng ghi / sửa khoản =====================
-let type = "INCOME", category = INC_CATS[0][0], editingId = null, activeTpl = null;
+// ============================ BẢNG TRƯỢT ============================
+function openSheetEl(id) { closeSheets(); $("scrim").classList.add("open"); $(id).classList.add("open"); $(id).setAttribute("aria-hidden", "false"); }
+function closeSheets() { $("scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s => { s.classList.remove("open"); s.setAttribute("aria-hidden", "true"); }); }
+$("scrim").onclick = closeSheets;
+document.addEventListener("click", e => { if (e.target.closest("[data-close]")) closeSheets(); if (e.target.closest("[data-open-sheet]")) openTx(null); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheets(); });
 
-function setType(t, keepCategory) {
-  type = t;
-  $("tInc").setAttribute("aria-pressed", t === "INCOME");
-  $("tExp").setAttribute("aria-pressed", t === "EXPENSE");
-  $("costBox").hidden = t !== "INCOME";
-  $("amountLabel").textContent = t === "INCOME" ? "Tổng thu" : "Số tiền chi";
-  const cats = t === "EXPENSE" ? EXP_CATS : INC_CATS;
-  if (!keepCategory || !cats.some(c => c[0] === category)) category = cats[0][0];
-  $("catgrid").innerHTML = cats.map(([n, e]) =>
-    `<button type="button" class="catbtn" data-cat="${esc(n)}" aria-pressed="${n === category}"><span class="e">${e}</span>${esc(n)}</button>`).join("");
+let type = "INCOME", category = INC_CATS[0], editingId = null, activeTpl = null;
+function setType(tp, keep) {
+  type = tp;
+  $("tInc").setAttribute("aria-pressed", tp === "INCOME"); $("tExp").setAttribute("aria-pressed", tp === "EXPENSE");
+  $("costBox").hidden = tp !== "INCOME";
+  $("amountLabel").textContent = tp === "INCOME" ? t("grossLbl") : t("spendAmt");
+  const cats = tp === "EXPENSE" ? EXP_CATS : INC_CATS;
+  if (!keep || !cats.includes(category)) category = cats[0];
+  $("catgrid").innerHTML = cats.map(c =>
+    `<button type="button" class="catbtn" data-cat="${esc(c)}" aria-pressed="${c === category}"><span class="e">${catIcon(c)}</span>${esc(catName(c))}</button>`).join("");
   updateNet();
 }
 function updateNet() {
@@ -859,93 +1128,104 @@ function updateNet() {
   $("netPreview").textContent = raw(Math.max(0, a - c));
   $("netPreview").style.color = c > a ? "var(--expense)" : "";
 }
-$("tInc").onclick = () => setType("INCOME");
-$("tExp").onclick = () => setType("EXPENSE");
+$("tInc").onclick = () => setType("INCOME"); $("tExp").onclick = () => setType("EXPENSE");
 $("amount").oninput = updateNet; $("cost").oninput = updateNet;
-$("catgrid").onclick = e => {
-  const b = e.target.closest(".catbtn"); if (!b) return;
-  category = b.dataset.cat;
-  $("catgrid").querySelectorAll(".catbtn").forEach(x => x.setAttribute("aria-pressed", x === b));
-};
+$("catgrid").onclick = e => { const b = e.target.closest(".catbtn"); if (!b) return; category = b.dataset.cat; $("catgrid").querySelectorAll(".catbtn").forEach(x => x.setAttribute("aria-pressed", x === b)); };
 document.querySelectorAll("[data-add]").forEach(b => b.onclick = () => { $("amount").value = (Number($("amount").value) || 0) + Number(b.dataset.add); updateNet(); });
 document.querySelectorAll("[data-cost]").forEach(b => b.onclick = () => { $("cost").value = (Number($("cost").value) || 0) + Number(b.dataset.cost); updateNet(); });
 document.querySelector("[data-cost-reset]").onclick = () => { $("cost").value = ""; updateNet(); };
 
-function openSheet(tx, preset) {
+const defaultDate = () => monthKey(today) === monthKey(view) ? ymd(today) : `${monthKey(view)}-01`;
+function openTx(tx, preset) {
   editingId = tx ? tx.id : null; activeTpl = preset ? preset.tplId : null;
-  $("sheetTitle").textContent = tx ? "Sửa giao dịch" : preset ? preset.memo : "Ghi khoản mới";
-  $("deleteTx").hidden = !tx; $("actions").classList.toggle("single", !tx);
-  $("txError").textContent = "";
+  $("sheetTitle").textContent = tx ? t("editTx") : preset ? preset.memo : t("newTx");
+  $("deleteTx").hidden = !tx; $("deleteTx").textContent = t("delete"); delete $("deleteTx").dataset.confirm;
+  $("actions").classList.toggle("single", !tx); $("txError").textContent = "";
   const src = tx || preset;
-  if (src) {
-    category = src.category; setType(src.type, true);
-    $("amount").value = src.amount; $("cost").value = src.cost || ""; $("memo").value = src.memo || "";
-    $("date").value = tx ? tx.date : defaultDate();
-  } else {
-    setType("INCOME"); $("amount").value = ""; $("cost").value = ""; $("memo").value = ""; $("date").value = defaultDate();
-  }
-  updateNet();
-  $("scrim").classList.add("open"); $("sheet").classList.add("open"); $("sheet").setAttribute("aria-hidden", "false");
-  if (!tx) setTimeout(() => (preset && preset.focusCost ? $("cost") : $("amount")).focus(), 260);
+  if (src) { category = src.category; setType(src.type, true); $("amount").value = src.amount; $("cost").value = src.cost || ""; $("memo").value = src.memo || ""; $("date").value = tx ? tx.date : defaultDate(); }
+  else { setType("INCOME"); $("amount").value = ""; $("cost").value = ""; $("memo").value = ""; $("date").value = defaultDate(); }
+  updateNet(); openSheetEl("sheet");
+  if (!tx) setTimeout(() => (preset && preset.focusCost ? $("cost") : $("amount")).focus(), 280);
 }
-function defaultDate() { return monthKey(today) === monthKey(view) ? ymd(today) : `${monthKey(view)}-01`; }
-function closeSheet() { $("scrim").classList.remove("open"); $("sheet").classList.remove("open"); $("sheet").setAttribute("aria-hidden", "true"); }
-$("fab").onclick = () => openSheet(null);
-document.addEventListener("click", e => { if (e.target.closest("[data-open-sheet]")) openSheet(null); });
-$("closeSheet").onclick = closeSheet; $("scrim").onclick = closeSheet;
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
-document.addEventListener("click", e => {
-  const row = e.target.closest(".tx"); if (!row) return;
-  const tx = items.find(i => String(i.id) === row.dataset.id); if (tx) openSheet(tx);
-});
+$("fab").onclick = () => openTx(null);
+document.addEventListener("click", e => { const row = e.target.closest(".tx"); if (!row) return; const tx = items.find(i => String(i.id) === row.dataset.id); if (tx) openTx(tx); });
 
 $("txForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const btn = $("txSubmit"); btn.disabled = true; $("txError").textContent = "";
+  const amount = Number($("amount").value) || 0, cost = type === "INCOME" ? (Number($("cost").value) || 0) : 0, date = $("date").value;
+  const err = amount <= 0 ? t("errAmount") : cost > amount ? t("errCost") : !date ? t("errDate") : "";
+  $("txError").textContent = err; if (err) return;
+  const btn = $("txSubmit"); btn.disabled = true;
   try {
-    const body = {
-      type, amount: Number($("amount").value) || null,
-      cost: type === "INCOME" ? (Number($("cost").value) || 0) : 0,
-      category, date: $("date").value || null, memo: $("memo").value.trim()
-    };
+    const body = { type, amount, cost, category, date, memo: $("memo").value.trim() };
     if (editingId) await api("/api/transactions/" + editingId, { method: "PUT", body });
     else await api("/api/transactions", { method: "POST", body });
-    if (activeTpl) { tplMemory[activeTpl] = { amount: body.amount, cost: body.cost }; store.set("sct-templates", tplMemory); renderTemplates(); }
-    const d = new Date(body.date + "T00:00:00");
-    view = new Date(d.getFullYear(), d.getMonth(), 1);
-    closeSheet();
-    toast(editingId ? "Đã cập nhật" : type === "INCOME" ? "Thực nhận +" + raw(body.amount - body.cost) : "Đã ghi −" + raw(body.amount));
+    if (activeTpl) { tplMemory[activeTpl] = { amount, cost }; store.set("sct-templates", tplMemory); renderTemplates(); }
+    const d = new Date(date + "T00:00:00"); view = new Date(d.getFullYear(), d.getMonth(), 1);
+    closeSheets();
+    toast(editingId ? t("tUpdated") : type === "INCOME" ? t("tSaved", { x: raw(amount - cost) }) : t("tSpent", { x: raw(amount) }));
     await load();
-  } catch (err) { $("txError").textContent = err.message; }
+  } catch (ex) { $("txError").textContent = ex.message; }
   finally { btn.disabled = false; }
 });
-
 let confirmTimer;
 $("deleteTx").onclick = async () => {
   const b = $("deleteTx");
-  if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Chắc chắn xóa?"; confirmTimer = setTimeout(() => { delete b.dataset.confirm; b.textContent = "Xóa"; }, 3000); return; }
-  clearTimeout(confirmTimer); delete b.dataset.confirm; b.textContent = "Xóa";
-  try { await api("/api/transactions/" + editingId, { method: "DELETE" }); closeSheet(); toast("Đã xóa"); await load(); }
-  catch (err) { $("txError").textContent = err.message; }
+  if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = t("confirmDelete"); confirmTimer = setTimeout(() => { delete b.dataset.confirm; b.textContent = t("delete"); }, 3000); return; }
+  clearTimeout(confirmTimer); delete b.dataset.confirm; b.textContent = t("delete");
+  try { await api("/api/transactions/" + editingId, { method: "DELETE" }); closeSheets(); toast(t("tDeleted")); await load(); }
+  catch (ex) { $("txError").textContent = ex.message; }
 };
 
-// ===================== Cài đặt =====================
+// ---- Số dư hiện tại ----
+function openBalance() {
+  $("balError").textContent = "";
+  $("balInput").value = summary && summary.currentBalance !== null && summary.currentBalance !== undefined ? summary.currentBalance : "";
+  openSheetEl("balSheet"); setTimeout(() => $("balInput").focus(), 280);
+}
+$("walletBtn").onclick = openBalance; $("openBalance").onclick = openBalance;
+document.querySelectorAll("[data-bal]").forEach(b => b.onclick = () => { $("balInput").value = (Number($("balInput").value) || 0) + Number(b.dataset.bal); });
+document.querySelector("[data-bal-reset]").onclick = () => { $("balInput").value = ""; };
+$("balForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = $("balInput").value.trim();
+  if (v === "" || isNaN(Number(v))) { $("balError").textContent = t("errBalance"); return; }
+  try { me = await api("/api/me/balance", { method: "PUT", body: { currentBalance: Math.round(Number(v)) } }); closeSheets(); toast(t("tBalance")); await load(); }
+  catch (ex) { $("balError").textContent = ex.message; }
+});
+
+// ============================ CÀI ĐẶT ============================
 $("budgetForm").addEventListener("submit", async e => {
   e.preventDefault();
-  try { me = await api("/api/me/budget", { method: "PUT", body: { monthlyBudget: Number($("budgetInput").value) || 0 } }); toast("Đã lưu ngân sách"); go("home"); await load(); }
-  catch (err) { toast(err.message); }
+  try { me = await api("/api/me/budget", { method: "PUT", body: { monthlyBudget: Number($("budgetInput").value) || 0 } }); toast(t("tBudget")); go("home"); await load(); }
+  catch (ex) { toast(ex.message); }
 });
 $("goalForm").addEventListener("submit", async e => {
   e.preventDefault();
-  try { me = await api("/api/me/goal", { method: "PUT", body: { monthlyIncomeGoal: Number($("goalInput").value) || 0 } }); toast("Đã lưu mục tiêu"); go("home"); await load(); }
-  catch (err) { toast(err.message); }
+  try { me = await api("/api/me/goal", { method: "PUT", body: { monthlyIncomeGoal: Number($("goalInput").value) || 0 } }); toast(t("tGoal")); go("home"); await load(); }
+  catch (ex) { toast(ex.message); }
 });
 
-// ===================== Khởi động =====================
-// Chuyển token từ bản cũ (nếu có) để người dùng không phải đăng nhập lại
+// ============================ PHÁO HOA KHI ĐẠT MỤC TIÊU ============================
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = $("confetti"), ctx = cv.getContext("2d"), dpr = devicePixelRatio || 1;
+  cv.hidden = false; cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.scale(dpr, dpr);
+  const colors = ["#10B981", "#34D399", "#22D3EE", "#F59E0B", "#F472B6", "#A78BFA"];
+  const ps = [...Array(140)].map(() => ({ x: innerWidth / 2, y: innerHeight * .3, vx: (Math.random() - .5) * 12, vy: Math.random() * -12 - 4,
+    s: 5 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: colors[Math.random() * colors.length | 0] }));
+  const t0 = performance.now();
+  (function frame(now) {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ps.forEach(p => { p.vy += .35; p.x += p.vx; p.y += p.vy; p.r += p.vr; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); ctx.restore(); });
+    if (now - t0 < 2200) requestAnimationFrame(frame); else { ctx.clearRect(0, 0, innerWidth, innerHeight); cv.hidden = true; }
+  })(t0);
+}
+
+// ============================ KHỞI ĐỘNG ============================
 try { const old = localStorage.getItem("sochitieu-token"); if (old && !token) { token = old; store.set("sct-token", old); } localStorage.removeItem("sochitieu-token"); } catch {}
-setAuthMode(false);
-$("eyeOpen").toggleAttribute("hidden", privacy); $("eyeClosed").toggleAttribute("hidden", !privacy); $("eyeBtn").setAttribute("aria-pressed", privacy);
+applyTheme(); applyI18n(); applyPrivacy();
+initGoogle();
 if (token) showApp().catch(() => logout()); else logout();
 </script>
 </body>
