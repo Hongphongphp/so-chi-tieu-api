@@ -16,214 +16,298 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Inter:wght@500;600;700&display=swap">
 <style>
-/* Bố cục: một cột cho thao tác một tay. Trên: thẻ thực nhận + mục tiêu. Giữa: nhập nhanh + biểu đồ. Dưới: lịch sử.
-   Nút + nổi và thanh tab nằm trong vùng ngón cái. */
+/* Bố cục: một cột cho thao tác một tay. Thẻ kính mờ trên nền có quầng xanh ngọc nhẹ.
+   Trên: thẻ thực nhận + mục tiêu. Giữa: nhập nhanh + biểu đồ. Dưới: lịch sử.
+   Thanh tab nổi bo tròn tách khỏi đáy, nút + tròn đứng cạnh. */
 :root{
-  --bg:#F8FAFC; --card:#FFFFFF; --card-2:#F1F5F9; --line:#E2E8F0; --fg:#0F172A; --muted:#64748B;
-  --income:#059669; --income-soft:rgba(16,185,129,.14); --expense:#E11D48; --expense-soft:rgba(244,63,94,.12);
-  --warn:#D97706; --on-income:#FFFFFF; --scrim:rgba(15,23,42,.45);
-  --hero-1:#0F172A; --hero-2:#1E293B; --hero-fg:#F8FAFC; --hero-muted:#94A3B8;
-  --heat-0:#E2E8F0;
+  --bg:#F4F7F9; --glow:rgba(16,185,129,.16); --glow-2:rgba(56,189,248,.10);
+  --card:rgba(255,255,255,.78); --card-solid:#FFFFFF; --card-2:rgba(15,23,42,.045);
+  --stroke:rgba(15,23,42,.07); --stroke-hi:rgba(255,255,255,.9);
+  --fg:#0B1220; --fg-2:#334155; --muted:#64748B;
+  --income:#059669; --income-hi:#10B981; --income-soft:rgba(16,185,129,.12);
+  --expense:#E11D48; --expense-soft:rgba(244,63,94,.10); --warn:#D97706;
+  --on-income:#FFFFFF; --scrim:rgba(15,23,42,.38);
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 28px -12px rgba(15,23,42,.14);
+  --shadow-lg:0 18px 40px -16px rgba(15,23,42,.28);
+  --hero-1:#0F172A; --hero-2:#064E3B; --hero-fg:#F8FAFC; --hero-muted:#9FB0C4;
+  --heat-0:rgba(15,23,42,.06);
+  --nav-bg:rgba(255,255,255,.82);
   --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
   --num:"Inter","Be Vietnam Pro",system-ui,sans-serif;
-  --nav-h:64px; --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --r-xl:28px; --r-lg:22px; --r-md:16px; --r-sm:12px;
+  --nav-h:68px; --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0F172A; --card:#1E293B; --card-2:#273449; --line:#334155; --fg:#F1F5F9; --muted:#94A3B8;
-  --income:#10B981; --income-soft:rgba(16,185,129,.16); --expense:#F43F5E; --expense-soft:rgba(244,63,94,.16);
-  --warn:#F59E0B; --on-income:#04130D; --scrim:rgba(2,6,23,.65);
-  --hero-1:#1E293B; --hero-2:#0B3B30; --hero-fg:#F8FAFC; --hero-muted:#94A3B8;
-  --heat-0:#273449; color-scheme:dark}}
+  --bg:#0B1120; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
+  --card:rgba(30,41,59,.62); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
+  --stroke:rgba(148,163,184,.12); --stroke-hi:rgba(255,255,255,.06);
+  --fg:#F1F5F9; --fg-2:#CBD5E1; --muted:#8A9BB2;
+  --income:#10B981; --income-hi:#34D399; --income-soft:rgba(16,185,129,.15);
+  --expense:#F43F5E; --expense-soft:rgba(244,63,94,.15); --warn:#F59E0B;
+  --on-income:#03140E; --scrim:rgba(2,6,23,.66);
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 30px -14px rgba(0,0,0,.6);
+  --shadow-lg:0 20px 44px -16px rgba(0,0,0,.7);
+  --hero-1:#13203A; --hero-2:#0A4A3A; --hero-fg:#F8FAFC; --hero-muted:#9FB0C4;
+  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(22,32,50,.78); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0F172A; --card:#1E293B; --card-2:#273449; --line:#334155; --fg:#F1F5F9; --muted:#94A3B8;
-  --income:#10B981; --income-soft:rgba(16,185,129,.16); --expense:#F43F5E; --expense-soft:rgba(244,63,94,.16);
-  --warn:#F59E0B; --on-income:#04130D; --scrim:rgba(2,6,23,.65);
-  --hero-1:#1E293B; --hero-2:#0B3B30; --hero-fg:#F8FAFC; --hero-muted:#94A3B8;
-  --heat-0:#273449; color-scheme:dark}
+  --bg:#0B1120; --glow:rgba(16,185,129,.20); --glow-2:rgba(56,189,248,.08);
+  --card:rgba(30,41,59,.62); --card-solid:#1E293B; --card-2:rgba(148,163,184,.08);
+  --stroke:rgba(148,163,184,.12); --stroke-hi:rgba(255,255,255,.06);
+  --fg:#F1F5F9; --fg-2:#CBD5E1; --muted:#8A9BB2;
+  --income:#10B981; --income-hi:#34D399; --income-soft:rgba(16,185,129,.15);
+  --expense:#F43F5E; --expense-soft:rgba(244,63,94,.15); --warn:#F59E0B;
+  --on-income:#03140E; --scrim:rgba(2,6,23,.66);
+  --shadow:0 1px 0 rgba(255,255,255,.04) inset,0 10px 30px -14px rgba(0,0,0,.6);
+  --shadow-lg:0 20px 44px -16px rgba(0,0,0,.7);
+  --hero-1:#13203A; --hero-2:#0A4A3A; --hero-fg:#F8FAFC; --hero-muted:#9FB0C4;
+  --heat-0:rgba(148,163,184,.10); --nav-bg:rgba(22,32,50,.78); color-scheme:dark}
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+/* Quầng sáng nền để lớp kính mờ có chiều sâu */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60% 40% at 15% 0%,var(--glow),transparent 70%),radial-gradient(50% 35% at 100% 30%,var(--glow-2),transparent 70%)}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:2px solid var(--income);outline-offset:2px}
-/* Mọi con số tiền tệ: chữ số đều nhau, thẳng hàng dọc */
-.num,input[type=number]{font-family:var(--num);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--income-hi);outline-offset:3px;border-radius:8px}
+
+/* ===== Chữ & số ===== */
+.num,input[type=number]{font-family:var(--num);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1,"cv11" 1;letter-spacing:-.015em}
 .muted{color:var(--muted)} .inc{color:var(--income)} .exp{color:var(--expense)}
-.lbl{font-size:.78rem;color:var(--muted)}
-.h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:0}
-.link{border:0;background:none;color:var(--income);font-weight:600;padding:4px 0;font-size:.85rem}
+.lbl{font-size:.78rem;color:var(--muted);letter-spacing:.005em}
+.eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.title{font-size:1.02rem;font-weight:650;letter-spacing:-.01em;margin:0;color:var(--fg)}
+.sub{font-size:.8rem;color:var(--muted)}
+.link{border:0;background:none;color:var(--income);font-weight:600;padding:6px 2px;font-size:.84rem;border-radius:8px;transition:opacity .15s}
+.link:active{opacity:.6}
 
 /* ===== Khung ===== */
 .app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh}
-.topbar{position:sticky;top:0;z-index:5;background:var(--bg);
-  padding:calc(var(--sat) + 10px) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));
-  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.topbar{position:sticky;top:0;z-index:5;
+  padding:calc(var(--sat) + 14px) max(20px,env(safe-area-inset-right)) 12px max(20px,env(safe-area-inset-left));
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+  background:linear-gradient(var(--bg) 60%,transparent);}
 .hello{min-width:0}
-.hello b{display:block;font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.month{display:flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px;flex:none}
-.month button{border:0;background:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;color:var(--muted)}
-.month button:active{background:var(--card-2)}
-.month strong{min-width:64px;text-align:center;font-size:.88rem;font-weight:600}
-.screen{padding:2px max(16px,env(safe-area-inset-right)) calc(var(--nav-h) + var(--sab) + 96px) max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
-.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.hello .lbl{display:block;margin-bottom:2px}
+.hello b{display:block;font-size:1.6rem;font-weight:750;letter-spacing:-.025em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.month{display:flex;align-items:center;background:var(--card);border:1px solid var(--stroke);border-radius:999px;padding:3px;flex:none;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow)}
+.month button{border:0;background:none;width:34px;height:34px;border-radius:50%;font-size:1.1rem;color:var(--muted);transition:background .15s,transform .15s var(--ease)}
+.month button:active{background:var(--card-2);transform:scale(.9)}
+.month strong{min-width:66px;text-align:center;font-size:.86rem;font-weight:650}
+.screen{padding:6px max(20px,env(safe-area-inset-right)) calc(var(--nav-h) + var(--sab) + 56px) max(20px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:20px}
+.section{display:flex;flex-direction:column;gap:12px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 4px}
+
+/* ===== Thẻ kính mờ ===== */
+.card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-xl);padding:20px;
+  box-shadow:var(--shadow);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);position:relative}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 1px 0 var(--stroke-hi)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
 
 /* ===== Thẻ tổng quan ===== */
-.hero{border-radius:24px;padding:18px;color:var(--hero-fg);display:flex;flex-direction:column;gap:16px;
-  background:radial-gradient(120% 140% at 100% 0%,var(--hero-2) 0%,var(--hero-1) 60%);border:1px solid rgba(148,163,184,.14)}
+.hero{border-radius:var(--r-xl);padding:22px 20px 20px;color:var(--hero-fg);display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden;
+  background:radial-gradient(120% 120% at 100% 0%,var(--hero-2) 0%,var(--hero-1) 58%);box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,.08)}
+.hero::before{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-90px;border-radius:50%;
+  background:radial-gradient(circle,rgba(52,211,153,.35),transparent 65%);pointer-events:none}
+.hero>*{position:relative}
 .hero .lbl{color:var(--hero-muted)}
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.amount-row{display:flex;align-items:center;gap:10px}
-.hero .big{font-size:2.15rem;font-weight:700;line-height:1.1;letter-spacing:-.02em}
-.eye{border:0;width:40px;height:40px;border-radius:12px;background:rgba(148,163,184,.14);color:var(--hero-fg);display:grid;place-items:center;flex:none}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hero .big{font-size:2.6rem;font-weight:750;line-height:1.05;letter-spacing:-.035em;margin-top:6px}
+.eye{border:1px solid rgba(255,255,255,.12);width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.08);color:var(--hero-fg);display:grid;place-items:center;flex:none;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .18s var(--ease),background .18s}
+.eye:active{transform:scale(.9)}
 .eye svg{width:20px;height:20px}
-.pill{font-size:.72rem;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(16,185,129,.18);color:#34D399;white-space:nowrap}
-.pill.neg{background:rgba(244,63,94,.18);color:#FB7185}
+.pill{font-size:.72rem;font-weight:650;padding:4px 10px;border-radius:999px;background:rgba(52,211,153,.18);color:#6EE7B7;white-space:nowrap}
 .breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.breakdown>div{background:rgba(148,163,184,.10);border-radius:14px;padding:9px 8px;min-width:0}
-.breakdown .num{font-size:clamp(.74rem,3.4vw,.9rem);font-weight:600;display:block;white-space:nowrap;letter-spacing:-.02em}
-.breakdown .lbl{font-size:.7rem;white-space:nowrap}
-.goal{display:flex;flex-direction:column;gap:8px}
-.goal-line{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.82rem}
-.track{height:10px;border-radius:999px;background:rgba(148,163,184,.18);overflow:hidden}
-.track>i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#059669,#34D399);transition:width .5s cubic-bezier(.2,.8,.2,1)}
-.goal-empty{border:1px dashed rgba(148,163,184,.35);border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:none;color:inherit;text-align:left;width:100%}
+.breakdown>div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-md);padding:10px 10px 11px;min-width:0}
+.breakdown .lbl{font-size:.7rem;white-space:nowrap;display:block;margin-bottom:3px}
+.breakdown .num{font-size:clamp(.76rem,3.5vw,.92rem);font-weight:650;display:block;white-space:nowrap;letter-spacing:-.025em}
+.goal{display:flex;flex-direction:column;gap:9px}
+.goal-line{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.82rem}
+.track{height:10px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
+.track>i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#059669,#34D399);box-shadow:0 0 12px rgba(52,211,153,.55);transition:width .8s var(--ease)}
+.goal-empty{border:1px dashed rgba(255,255,255,.22);border-radius:var(--r-md);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(255,255,255,.04);color:inherit;text-align:left;width:100%;transition:transform .15s var(--ease)}
+.goal-empty:active{transform:scale(.98)}
 
 /* ===== Nhập nhanh ===== */
-.templates{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-snap-type:x proximity}
+.templates{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:4px 20px 8px;scroll-snap-type:x proximity}
 .templates::-webkit-scrollbar{display:none}
-.tpl{flex:none;scroll-snap-align:start;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:9px;min-width:132px;text-align:left}
-.tpl:active{transform:scale(.97)}
-.tpl .e{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:1.05rem;background:var(--income-soft);flex:none}
+.tpl{flex:none;scroll-snap-align:start;border:1px solid var(--stroke);background:var(--card);border-radius:var(--r-lg);padding:12px 14px 12px 12px;display:flex;align-items:center;gap:10px;min-width:140px;text-align:left;
+  box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .18s var(--ease),border-color .18s}
+.tpl:active{transform:scale(.95)}
+.tpl .e{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-size:1.1rem;background:var(--income-soft);flex:none}
 .tpl.out .e{background:var(--expense-soft)}
-.tpl b{display:block;font-size:.85rem;font-weight:600;white-space:nowrap}
-.tpl .lbl{font-size:.72rem}
+.tpl b{display:block;font-size:.88rem;font-weight:650;white-space:nowrap}
+.tpl .lbl{font-size:.74rem}
 
 /* ===== Biểu đồ ===== */
-.seg{display:inline-grid;grid-auto-flow:column;background:var(--card-2);border-radius:10px;padding:3px;gap:2px}
-.seg button{border:0;background:none;padding:6px 12px;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--card);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.bars{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:150px;padding-top:18px}
-.barcol{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;min-width:0}
+.seg{display:inline-grid;grid-auto-flow:column;background:var(--card-2);border-radius:12px;padding:3px;gap:2px}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:9px;font-size:.8rem;font-weight:600;color:var(--muted);transition:background .2s,color .2s}
+.seg button[aria-pressed="true"]{background:var(--card-solid);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.bars{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;height:160px;padding-top:20px}
+.barcol{display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end;min-width:0}
 .barcol .v{font-size:.66rem;color:var(--muted);white-space:nowrap}
-.barcol .b{width:100%;max-width:30px;border-radius:8px 8px 4px 4px;background:var(--income-soft);min-height:4px;transition:height .45s cubic-bezier(.2,.8,.2,1)}
-.barcol.top .b{background:var(--income)}
-.barcol.top .v{color:var(--income);font-weight:600}
+.barcol .b{width:100%;max-width:30px;border-radius:9px 9px 5px 5px;background:var(--income-soft);min-height:5px;transform-origin:bottom;animation:grow .6s var(--ease) both}
+.barcol.top .b{background:linear-gradient(180deg,var(--income-hi),var(--income));box-shadow:0 6px 16px -6px rgba(16,185,129,.7)}
+.barcol.top .v{color:var(--income);font-weight:650}
 .barcol .d{font-size:.7rem;color:var(--muted)}
 .barcol.today .d{color:var(--fg);font-weight:700}
-.heat-wd,.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.bars.empty-chart .b{background:repeating-linear-gradient(180deg,var(--card-2) 0 4px,transparent 4px 8px);animation:none}
+@keyframes grow{from{transform:scaleY(.05);opacity:.3}to{transform:none;opacity:1}}
+.heat-wd,.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .heat-wd span{text-align:center;font-size:.66rem;color:var(--muted);padding-bottom:4px}
-.heat .c{aspect-ratio:1;max-width:100%;border-radius:8px;background:var(--heat-0);display:grid;place-items:center;font-size:.68rem;color:var(--muted);border:0;padding:0}
+.heat .c{aspect-ratio:1;max-width:100%;border-radius:10px;background:var(--heat-0);display:grid;place-items:center;font-size:.68rem;color:var(--muted)}
 .heat .c.pad{background:none}
-.heat .c[data-l="1"]{background:rgba(16,185,129,.28);color:var(--fg)}
-.heat .c[data-l="2"]{background:rgba(16,185,129,.5);color:var(--fg)}
-.heat .c[data-l="3"]{background:rgba(16,185,129,.75);color:#04130D}
-.heat .c[data-l="4"]{background:#10B981;color:#04130D;font-weight:700}
+.heat .c[data-l="1"]{background:rgba(16,185,129,.25);color:var(--fg)}
+.heat .c[data-l="2"]{background:rgba(16,185,129,.48);color:var(--fg)}
+.heat .c[data-l="3"]{background:rgba(16,185,129,.74);color:#03140E}
+.heat .c[data-l="4"]{background:#10B981;color:#03140E;font-weight:700;box-shadow:0 4px 12px -4px rgba(16,185,129,.8)}
 .heat .c.today{box-shadow:inset 0 0 0 2px var(--fg)}
-.legend{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:10px;font-size:.68rem;color:var(--muted)}
-.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
-.chart-note{margin:10px 0 0;font-size:.8rem;color:var(--muted)}
+.legend{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:12px;font-size:.68rem;color:var(--muted)}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.chart-note{margin:14px 0 0;font-size:.82rem;color:var(--muted)}
+.chart-note b{color:var(--fg);font-weight:650}
 
 /* ===== Ngân sách ===== */
-.bar{height:8px;background:var(--card-2);border-radius:4px;overflow:hidden}
-.bar>i{display:block;height:100%;width:0;background:var(--income);border-radius:4px;transition:width .35s}
+.bar{height:10px;background:var(--card-2);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--income);border-radius:999px;transition:width .7s var(--ease)}
 .bar.over>i{background:var(--expense)} .bar.near>i{background:var(--warn)}
+.stat{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:14px}
+.stat .num{font-size:1.35rem;font-weight:750;letter-spacing:-.03em}
 
 /* ===== Lịch sử ===== */
-.day{display:flex;justify-content:space-between;align-items:baseline;padding:6px 4px 6px}
-.list{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
-.tx{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:12px 14px;border-top:1px solid var(--line)}
-.tx:first-child{border-top:0}
+.day{display:flex;justify-content:space-between;align-items:baseline;padding:4px 6px 8px}
+.list{background:var(--card);border:1px solid var(--stroke);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.day-group{display:flex;flex-direction:column;margin-bottom:18px;animation:rise .4s var(--ease) both}
+.tx{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:14px 16px;position:relative;transition:background .15s}
+.tx+.tx::before{content:"";position:absolute;top:0;left:70px;right:16px;height:1px;background:var(--stroke)}
 .tx:active{background:var(--card-2)}
-.tx .ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:1.1rem;background:var(--card-2)}
+.tx .ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:1.1rem;background:var(--card-2)}
 .tx.in .ic{background:var(--income-soft)}
 .tx .t{min-width:0}
-.tx b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx b{display:block;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tx .r{text-align:right}
-.tx .amt{font-weight:700;display:block}
+.tx .amt{font-weight:700;display:block;font-size:.98rem}
 .tx .sub{font-size:.72rem;color:var(--muted);display:block;white-space:nowrap}
 .tx .sub .exp{color:var(--expense)}
-.empty{text-align:center;color:var(--muted);padding:26px 16px;font-size:.9rem}
-.empty .e{font-size:1.8rem;display:block;margin-bottom:6px}
+
+/* ===== Empty state ===== */
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 24px 26px;gap:6px}
+.empty svg{width:132px;height:104px;margin-bottom:6px}
+.empty .title{font-size:1rem}
+.empty .sub{max-width:250px}
+.empty .btn{margin-top:12px}
+.float{animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
 /* ===== Form ===== */
-.field{display:flex;flex-direction:column;gap:5px;min-width:0}
-input,select{border:1px solid var(--line);background:var(--card-2);border-radius:12px;padding:11px 12px;width:100%;font-size:16px;color:var(--fg)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+input,select{border:1px solid var(--stroke);background:var(--card-2);border-radius:var(--r-sm);padding:12px 13px;width:100%;font-size:16px;color:var(--fg);transition:border-color .15s,background .15s}
+input:focus{outline:none;border-color:var(--income-hi);background:transparent}
 input::placeholder{color:var(--muted)}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 16px;font-weight:600}
-.btn.primary{background:var(--income);border-color:var(--income);color:var(--on-income)}
+.btn{border:1px solid var(--stroke);background:var(--card-solid);border-radius:var(--r-md);padding:13px 18px;font-weight:650;transition:transform .15s var(--ease),filter .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(180deg,var(--income-hi),var(--income));border-color:transparent;color:var(--on-income);box-shadow:0 8px 20px -10px rgba(16,185,129,.8)}
 .btn.danger{color:var(--expense)}
 .btn.block{width:100%}
 .btn:disabled{opacity:.6}
-.setting-row{display:flex;gap:10px;margin-top:10px}
+.setting-row{display:flex;gap:10px;margin-top:12px}
 .setting-row input{flex:1}
 
-/* ===== Thanh tab + nút nổi ===== */
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--line);padding:0 max(8px,env(safe-area-inset-right)) var(--sab) max(8px,env(safe-area-inset-left))}
-.nav-in{max-width:480px;margin:0 auto;height:var(--nav-h);display:grid;grid-template-columns:repeat(3,1fr);align-items:center}
-.tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.7rem;color:var(--muted);padding:6px 0}
-.tab svg{width:22px;height:22px}
-.tab[aria-current="page"]{color:var(--income);font-weight:600}
-.fab{position:fixed;z-index:11;right:max(18px,calc((100vw - 480px)/2 + 18px));bottom:calc(var(--nav-h) + var(--sab) + 16px);
-  width:60px;height:60px;border-radius:20px;border:0;background:var(--income);color:var(--on-income);
-  box-shadow:0 10px 24px rgba(16,185,129,.35);display:grid;place-items:center}
-.fab svg{width:28px;height:28px}
-.fab:active{transform:scale(.94)}
+/* ===== Thanh điều hướng nổi ===== */
+.dock{position:fixed;left:0;right:0;z-index:10;bottom:calc(12px + var(--sab));pointer-events:none;
+  padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+.dock-in{max-width:452px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.nav{pointer-events:auto;flex:1;height:var(--nav-h);border-radius:26px;background:var(--nav-bg);border:1px solid var(--stroke);
+  backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);box-shadow:var(--shadow-lg);
+  display:grid;grid-template-columns:repeat(3,1fr);padding:6px;position:relative}
+.nav-ind{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/3);border-radius:20px;background:var(--income-soft);
+  transition:transform .35s var(--ease);pointer-events:none}
+.tab{position:relative;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.7rem;font-weight:550;color:var(--muted);border-radius:20px;transition:color .2s}
+.tab svg{width:23px;height:23px;transition:transform .25s var(--ease)}
+.tab[aria-current="page"]{color:var(--income);font-weight:700}
+.tab[aria-current="page"] svg{transform:translateY(-1px) scale(1.06)}
+.tab:active svg{transform:scale(.88)}
+.fab{pointer-events:auto;flex:none;width:var(--nav-h);height:var(--nav-h);border-radius:24px;border:0;color:var(--on-income);
+  background:linear-gradient(160deg,var(--income-hi),var(--income));box-shadow:0 14px 28px -10px rgba(16,185,129,.75),inset 0 1px 0 rgba(255,255,255,.35);
+  display:grid;place-items:center;transition:transform .2s var(--ease)}
+.fab svg{width:28px;height:28px;transition:transform .3s var(--ease)}
+.fab:active{transform:scale(.92)}
+.fab:active svg{transform:rotate(90deg)}
 
 /* ===== Bảng trượt ===== */
-.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .scrim.open{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:480px;margin:0 auto;background:var(--card);
-  border-radius:26px 26px 0 0;padding:8px 16px calc(16px + var(--sab));max-height:94dvh;overflow-y:auto;
-  transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);border-top:1px solid var(--line)}
-.sheet.open{transform:none}
-.grip{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 10px}
-.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.sheet-head h2{margin:0;font-size:1.05rem}
-.x{border:0;background:var(--card-2);width:34px;height:34px;border-radius:50%}
-.typeseg{display:grid;grid-template-columns:1fr 1fr;background:var(--card-2);border-radius:14px;padding:3px;margin-bottom:12px}
-.typeseg button{border:0;background:none;padding:10px;border-radius:11px;font-weight:600;color:var(--muted)}
-.typeseg button[aria-pressed="true"]{background:var(--card);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:480px;margin:0 auto;background:var(--card-solid);
+  border-radius:30px 30px 0 0;padding:8px 20px calc(18px + var(--sab));max-height:94dvh;overflow-y:auto;
+  transform:translateY(105%);visibility:hidden;transition:transform .34s var(--ease),visibility 0s linear .34s;border:1px solid var(--stroke);border-bottom:0;box-shadow:0 -20px 50px -20px rgba(0,0,0,.4)}
+.sheet.open{transform:none;visibility:visible;transition:transform .34s var(--ease)}
+.grip{width:42px;height:5px;border-radius:3px;background:var(--stroke);margin:6px auto 12px}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sheet-head h2{margin:0;font-size:1.2rem;font-weight:750;letter-spacing:-.02em}
+.x{border:0;background:var(--card-2);width:36px;height:36px;border-radius:50%;transition:transform .15s}
+.x:active{transform:scale(.9)}
+.typeseg{display:grid;grid-template-columns:1fr 1fr;background:var(--card-2);border-radius:var(--r-md);padding:4px;margin-bottom:14px}
+.typeseg button{border:0;background:none;padding:10px;border-radius:12px;font-weight:650;color:var(--muted);transition:background .2s,color .2s}
+.typeseg button[aria-pressed="true"]{background:var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.14)}
 .typeseg button#tInc[aria-pressed="true"]{color:var(--income)}
 .typeseg button#tExp[aria-pressed="true"]{color:var(--expense)}
 .amt-in{display:flex;align-items:baseline;justify-content:center;gap:6px;padding:4px 0 2px}
-.amt-in input{border:0;border-bottom:2px solid var(--line);border-radius:0;background:none;text-align:center;font-size:2.3rem;font-weight:700;padding:0 0 2px;width:100%;max-width:290px;-moz-appearance:textfield}
-.amt-in input:focus{outline:none;border-color:var(--income)}
+.amt-in input{border:0;border-bottom:2px solid var(--stroke);border-radius:0;background:none;text-align:center;font-size:2.5rem;font-weight:750;padding:0 0 4px;width:100%;max-width:290px;-moz-appearance:textfield}
+.amt-in input:focus{border-color:var(--income-hi)}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .amt-in span{font-size:1.4rem;color:var(--muted)}
-.quick{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0 14px}
-.chip{border:1px solid var(--line);background:var(--card-2);border-radius:999px;padding:6px 11px;font-size:.8rem}
-.chip:active{background:var(--income-soft)}
-.costbox{background:var(--card-2);border-radius:16px;padding:12px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+.quick{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:12px 0 16px}
+.chip{border:1px solid var(--stroke);background:var(--card-2);border-radius:999px;padding:7px 12px;font-size:.8rem;font-weight:550;transition:transform .12s var(--ease),background .15s}
+.chip:active{transform:scale(.92);background:var(--income-soft)}
+.costbox{background:var(--card-2);border-radius:var(--r-lg);padding:14px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px}
 .costbox .row{display:flex;align-items:center;gap:10px}
-.costbox input{background:var(--card);flex:1}
+.costbox input{background:var(--card-solid);flex:1}
 .costbox .quick{justify-content:flex-start;margin:0}
-.costbox .chip{background:var(--card)}
-.netline{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:8px}
-.netline .num{font-size:1.1rem;font-weight:700;color:var(--income)}
-.catgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.catbtn{border:1px solid var(--line);background:var(--card-2);border-radius:14px;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.7rem;line-height:1.2;text-align:center;min-height:70px}
-.catbtn .e{font-size:1.25rem}
-.catbtn[aria-pressed="true"]{border-color:var(--income);background:var(--income-soft);font-weight:600}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.costbox .chip{background:var(--card-solid)}
+.netline{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--stroke);padding-top:10px}
+.netline .num{font-size:1.2rem;font-weight:750;color:var(--income)}
+.catgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.catbtn{border:1px solid var(--stroke);background:var(--card-2);border-radius:var(--r-md);padding:10px 4px 9px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.7rem;line-height:1.2;text-align:center;min-height:74px;transition:transform .15s var(--ease),border-color .15s,background .15s}
+.catbtn:active{transform:scale(.94)}
+.catbtn .e{font-size:1.3rem}
+.catbtn[aria-pressed="true"]{border-color:var(--income-hi);background:var(--income-soft);font-weight:650}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .error{color:var(--expense);font-size:.85rem;min-height:1.2em;margin:0 0 8px}
 .actions{display:grid;grid-template-columns:auto 1fr;gap:10px}
 .actions.single{grid-template-columns:1fr}
 
 /* ===== Đăng nhập ===== */
-.auth{max-width:400px;margin:0 auto;padding:calc(var(--sat) + 10vh) 20px 40px;display:flex;flex-direction:column;gap:18px}
-.logo{width:56px;height:56px;border-radius:18px;background:var(--income);display:grid;place-items:center;color:var(--on-income);font-weight:700;font-size:1.4rem}
-.auth h1{margin:0;font-size:1.5rem}
-.auth form{display:flex;flex-direction:column;gap:12px}
+.auth{max-width:400px;margin:0 auto;padding:calc(var(--sat) + 10vh) 24px 40px;display:flex;flex-direction:column;gap:22px;animation:rise .5s var(--ease) both}
+.logo{width:60px;height:60px;border-radius:20px;background:linear-gradient(160deg,var(--income-hi),var(--income));display:grid;place-items:center;color:var(--on-income);font-weight:800;font-size:1.5rem;box-shadow:0 14px 28px -12px rgba(16,185,129,.8)}
+.auth h1{margin:0;font-size:1.8rem;font-weight:750;letter-spacing:-.03em}
+.auth form{display:flex;flex-direction:column;gap:14px}
 
-.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--sab) + 94px);transform:translate(-50%,20px);opacity:0;z-index:30;
-  background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.85rem;transition:.2s;pointer-events:none;white-space:nowrap}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+/* ===== Chuyển cảnh ===== */
+.screen.enter>*{animation:rise .42s var(--ease) both}
+.screen.enter>*:nth-child(2){animation-delay:.04s}
+.screen.enter>*:nth-child(3){animation-delay:.08s}
+.screen.enter>*:nth-child(4){animation-delay:.12s}
+.screen.enter>*:nth-child(5){animation-delay:.16s}
+.screen.enter>*:nth-child(n+6){animation-delay:.2s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (hover:hover){
+  .tpl:hover,.btn:hover,.chip:hover,.catbtn:hover{transform:translateY(-1px)}
+  .tx:hover{background:var(--card-2)}
+  .fab:hover{transform:translateY(-2px)}
+}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--sab) + 30px);transform:translate(-50%,16px) scale(.96);opacity:0;z-index:30;
+  background:var(--fg);color:var(--bg);padding:11px 18px;border-radius:999px;font-size:.85rem;font-weight:600;transition:.25s var(--ease);pointer-events:none;white-space:nowrap;box-shadow:var(--shadow-lg)}
+.toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
 body.loading .screen{opacity:.6;transition:opacity .2s}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media (max-width:360px){.hero .big{font-size:1.8rem}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:360px){.hero .big{font-size:2.1rem}.hello b{font-size:1.35rem}}
 </style>
 </head>
 <body>
@@ -293,14 +377,14 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
       </button>
     </section>
 
-    <div>
-      <div class="card-head" style="margin-bottom:8px;padding:0 2px"><span class="h2">Nhập nhanh 1 chạm</span></div>
+    <section class="section">
+      <div class="section-head"><h2 class="title">Nhập nhanh</h2><span class="sub">Chạm 1 lần để ghi</span></div>
       <div class="templates" id="templates"></div>
-    </div>
+    </section>
 
     <section class="card">
       <div class="card-head">
-        <span class="h2">Thu nhập thực nhận</span>
+        <div><h2 class="title">Thu nhập thực nhận</h2><span class="sub" id="chartSub">7 ngày gần nhất</span></div>
         <div class="seg" role="group" aria-label="Kiểu biểu đồ">
           <button id="view7" aria-pressed="true">7 ngày</button>
           <button id="viewMonth" aria-pressed="false">Tháng</button>
@@ -316,18 +400,18 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
     </section>
 
     <section class="card" id="budgetCard">
-      <div class="card-head"><span class="h2">Ngân sách chi tiêu</span><span class="num lbl" id="budgetPct"></span></div>
+      <div class="card-head" style="margin-bottom:14px"><div><h2 class="title">Ngân sách chi tiêu</h2><span class="sub num" id="budgetPct"></span></div></div>
       <div class="bar" id="budgetBar"><i></i></div>
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;gap:10px">
+      <div class="stat">
         <span class="lbl" id="dailyLabel">Mỗi ngày còn tiêu được</span>
-        <span class="num" style="font-weight:700;font-size:1.1rem" id="dailyLimit">—</span>
+        <span class="num" id="dailyLimit">—</span>
       </div>
     </section>
 
-    <div>
-      <div class="card-head" style="margin-bottom:8px;padding:0 2px"><span class="h2">Giao dịch gần đây</span><button class="link" data-go="history">Xem tất cả</button></div>
+    <section class="section">
+      <div class="section-head"><h2 class="title">Giao dịch gần đây</h2><button class="link" data-go="history">Xem tất cả</button></div>
       <div class="list" id="recent"></div>
-    </div>
+    </section>
   </main>
 
   <!-- ===== Lịch sử ===== -->
@@ -336,7 +420,7 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
   <!-- ===== Cài đặt ===== -->
   <main class="screen" id="settingsScreen" hidden>
     <section class="card">
-      <span class="h2">Mục tiêu thu nhập thực nhận mỗi tháng</span>
+      <h2 class="title">Mục tiêu thu nhập thực nhận mỗi tháng</h2>
       <form class="setting-row" id="goalForm" novalidate>
         <input id="goalInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="2000000" aria-label="Mục tiêu tháng (₩)">
         <button class="btn primary" type="submit">Lưu</button>
@@ -344,7 +428,7 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
       <p class="lbl" style="margin:8px 0 0">Tính theo số tiền thực nhận (tổng thu trừ chi phí đi kèm). Để 0 nếu không đặt.</p>
     </section>
     <section class="card">
-      <span class="h2">Ngân sách chi tiêu mỗi tháng</span>
+      <h2 class="title">Ngân sách chi tiêu mỗi tháng</h2>
       <form class="setting-row" id="budgetForm" novalidate>
         <input id="budgetInput" type="number" min="0" step="10000" inputmode="numeric" placeholder="1000000" aria-label="Ngân sách tháng (₩)">
         <button class="btn primary" type="submit">Lưu</button>
@@ -352,31 +436,34 @@ body.loading .screen{opacity:.6;transition:opacity .2s}
       <p class="lbl" style="margin:8px 0 0">Dùng để tính mỗi ngày còn tiêu được bao nhiêu.</p>
     </section>
     <section class="card">
-      <span class="h2">Giao diện</span>
+      <h2 class="title">Giao diện</h2>
       <div class="seg" role="group" aria-label="Chế độ màu" style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr)">
         <button data-theme-set="system">Theo máy</button><button data-theme-set="light">Sáng</button><button data-theme-set="dark">Tối</button>
       </div>
     </section>
     <section class="card">
-      <span class="h2">Tài khoản</span>
+      <h2 class="title">Tài khoản</h2>
       <p style="margin:8px 0 0"><b id="userName"></b><br><span class="lbl" id="userEmail"></span></p>
       <p class="lbl" style="margin:10px 0 0">Cài lên điện thoại: Android (Chrome) menu ⋮ → <b>Thêm vào màn hình chính</b>. iPhone (Safari) nút Chia sẻ → <b>Thêm vào MH chính</b>.</p>
     </section>
     <button class="btn block danger" id="logout">Đăng xuất</button>
   </main>
 
-  <nav class="nav" aria-label="Điều hướng">
-    <div class="nav-in">
-      <button class="tab" data-go="home" aria-current="page">
+  <div class="dock">
+    <div class="dock-in">
+      <nav class="nav" aria-label="Điều hướng">
+        <span class="nav-ind" id="navInd" aria-hidden="true"></span>
+        <button class="tab" data-go="home" aria-current="page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Tổng quan</button>
       <button class="tab" data-go="history">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Lịch sử</button>
       <button class="tab" data-go="settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Cài đặt</button>
-    </div>
-  </nav>
-  <button class="fab" id="fab" aria-label="Ghi khoản mới">
+      </nav>
+      <button class="fab" id="fab" aria-label="Ghi khoản mới">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+  </div>
 </div>
 
 <!-- ========== BẢNG GHI / SỬA KHOẢN ========== -->
@@ -546,7 +633,10 @@ function go(name) {
   $("screenSub").textContent = name === "home" ? "Xin chào" : "";
   $("screenTitle").textContent = name === "home" ? (me ? me.displayName : "") : name === "history" ? "Lịch sử giao dịch" : "Cài đặt";
   $("monthNav").hidden = name === "settings";
-  document.querySelectorAll(".tab").forEach(t => t.dataset.go === name ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current"));
+  const tabs = [...document.querySelectorAll(".tab")];
+  tabs.forEach(t => t.dataset.go === name ? t.setAttribute("aria-current", "page") : t.removeAttribute("aria-current"));
+  $("navInd").style.transform = `translateX(${Math.max(0, tabs.findIndex(t => t.dataset.go === name)) * 100}%)`;
+  const scr = $(SCREENS[name]); scr.classList.remove("enter"); void scr.offsetWidth; scr.classList.add("enter");
   window.scrollTo(0, 0);
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); });
@@ -582,7 +672,7 @@ function renderAll() { if (!summary) return; renderHero(); renderChart(); render
 // ---------- Thẻ tổng quan ----------
 function renderHero() {
   const s = summary;
-  $("netIncome").textContent = money(s.netIncome, s.netIncome < 0 ? "−" : "");
+  countUp($("netIncome"), s.netIncome);
   $("income").textContent = money(s.income);
   $("incomeCost").textContent = money(s.incomeCost, s.incomeCost ? "−" : "");
   $("balance").textContent = money(s.balance, s.balance < 0 ? "−" : "");
@@ -600,6 +690,22 @@ function renderHero() {
   }
 }
 
+// Hiệu ứng số chạy lên cho con số chính
+let lastNet = 0, countRaf;
+function countUp(el, to) {
+  cancelAnimationFrame(countRaf);
+  const from = lastNet; lastNet = to;
+  const fmtN = v => money(v, v < 0 ? "−" : "");
+  if (privacy || from === to || matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = fmtN(to); return; }
+  const t0 = performance.now(), dur = 700;
+  const step = t => {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = fmtN(Math.round(from + (to - from) * e));
+    if (k < 1) countRaf = requestAnimationFrame(step);
+  };
+  countRaf = requestAnimationFrame(step);
+}
+
 // ---------- Biểu đồ ----------
 function dailyNetIncome(list) {
   const m = {};
@@ -610,6 +716,7 @@ function renderChart() {
   $("view7").setAttribute("aria-pressed", chartMode === "7");
   $("viewMonth").setAttribute("aria-pressed", chartMode === "month");
   $("chart7").hidden = chartMode !== "7"; $("chartMonth").hidden = chartMode !== "month";
+  $("chartSub").textContent = chartMode === "7" ? "7 ngày gần nhất" : "Lịch nhiệt theo ngày";
   const daily = dailyNetIncome([...items, ...prevItems]);
 
   if (chartMode === "7") {
@@ -619,14 +726,16 @@ function renderChart() {
     const days = [...Array(7)].map((_, k) => { const d = new Date(end); d.setDate(end.getDate() - 6 + k); return d; });
     const vals = days.map(d => Math.max(0, daily[ymd(d)] || 0));
     const max = Math.max(...vals), topIdx = max > 0 ? vals.indexOf(max) : -1;
+    $("chart7").classList.toggle("empty-chart", max === 0);
+    const ph = [35, 55, 40, 70, 50, 85, 60];
     $("chart7").innerHTML = days.map((d, k) => `<div class="barcol${k === topIdx ? " top" : ""}${ymd(d) === ymd(today) ? " today" : ""}">
       <span class="v num">${vals[k] ? short(vals[k]) : ""}</span>
-      <span class="b" style="height:${max ? Math.max(4, vals[k] / max * 100) : 4}%"></span>
+      <span class="b" style="height:${max ? Math.max(4, vals[k] / max * 100) : ph[k]}%;animation-delay:${k * 40}ms"></span>
       <span class="d">${ymd(d) === ymd(today) ? "Nay" : WD[d.getDay()]}</span></div>`).join("");
     const total = vals.reduce((a, b) => a + b, 0);
     $("chartNote").innerHTML = max > 0
       ? `7 ngày: <b class="num">${money(total)}</b> · cao nhất <b>${WD[days[topIdx].getDay()]} ${pad(days[topIdx].getDate())}/${pad(days[topIdx].getMonth() + 1)}</b>`
-      : "Chưa có thu nhập trong 7 ngày này.";
+      : "Chưa có thu nhập trong 7 ngày này. Ghi một khoản thu để biểu đồ hiện lên.";
   } else {
     const y = view.getFullYear(), m = view.getMonth(), n = new Date(y, m + 1, 0).getDate();
     const offset = (new Date(y, m, 1).getDay() + 6) % 7; // tuần bắt đầu từ T2
@@ -676,7 +785,21 @@ function txRow(i) {
     <span class="t"><b>${esc(i.memo || i.category)}</b><span class="lbl">${esc(i.category)}</span></span>
     <span class="r"><span class="num amt ${inc ? "inc" : "exp"}">${money(inc ? i.amount - cost : i.amount, inc ? "+" : "−")}</span>${sub}</span></button>`;
 }
-const EMPTY = `<div class="empty"><span class="e">🧾</span>Chưa có giao dịch nào trong tháng này.<br>Chạm một nút <b>Nhập nhanh</b> hoặc nút <b>+</b> để bắt đầu.</div>`;
+const EMPTY_ART = `<svg class="float" viewBox="0 0 132 104" fill="none" aria-hidden="true">
+  <ellipse cx="66" cy="96" rx="40" ry="5" fill="currentColor" opacity=".08"/>
+  <rect x="30" y="14" width="72" height="74" rx="14" fill="var(--income-soft)" stroke="var(--income)" stroke-opacity=".5" stroke-width="1.5"/>
+  <rect x="42" y="30" width="34" height="6" rx="3" fill="var(--income)" opacity=".55"/>
+  <rect x="42" y="44" width="48" height="5" rx="2.5" fill="currentColor" opacity=".14"/>
+  <rect x="42" y="56" width="40" height="5" rx="2.5" fill="currentColor" opacity=".14"/>
+  <rect x="42" y="68" width="26" height="5" rx="2.5" fill="currentColor" opacity=".14"/>
+  <circle cx="98" cy="24" r="13" fill="var(--income)"/><path d="M98 18v12M92 24h12" stroke="var(--on-income)" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M20 40l3 3m0-3l-3 3M112 64l2.5 2.5m0-2.5L112 66.5" stroke="var(--income)" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="22" cy="70" r="2.5" fill="var(--income)" opacity=".6"/><circle cx="116" cy="44" r="2" fill="var(--income)" opacity=".5"/>
+</svg>`;
+const EMPTY = `<div class="empty" style="color:var(--fg)">${EMPTY_ART}
+  <p class="title" style="margin:0">Tháng này còn trống</p>
+  <p class="sub" style="margin:0">Ghi khoản thu hoặc chi đầu tiên để xem thực nhận, biểu đồ và tiến độ mục tiêu.</p>
+  <button class="btn primary" data-open-sheet>Ghi khoản đầu tiên</button></div>`;
 function renderLists() {
   $("recent").innerHTML = items.length ? items.slice(0, 5).map(txRow).join("") : EMPTY;
   if (!items.length) { $("history").innerHTML = `<div class="list">${EMPTY}</div>`; return; }
@@ -684,8 +807,8 @@ function renderLists() {
   items.forEach(i => (groups[i.date] ||= []).push(i));
   $("history").innerHTML = Object.entries(groups).map(([d, arr]) => {
     const net = arr.reduce((s, i) => s + netOf(i), 0);
-    return `<div class="day"><span class="h2">${dayLabel(d)}</span><span class="num lbl">${money(net, net >= 0 ? "+" : "−")}</span></div>
-      <div class="list" style="margin-bottom:8px">${arr.map(txRow).join("")}</div>`;
+    return `<div class="day-group"><div class="day"><span class="eyebrow">${dayLabel(d)}</span><span class="num lbl">${money(net, net >= 0 ? "+" : "−")}</span></div>
+      <div class="list">${arr.map(txRow).join("")}</div></div>`;
   }).join("");
 }
 
@@ -768,6 +891,7 @@ function openSheet(tx, preset) {
 function defaultDate() { return monthKey(today) === monthKey(view) ? ymd(today) : `${monthKey(view)}-01`; }
 function closeSheet() { $("scrim").classList.remove("open"); $("sheet").classList.remove("open"); $("sheet").setAttribute("aria-hidden", "true"); }
 $("fab").onclick = () => openSheet(null);
+document.addEventListener("click", e => { if (e.target.closest("[data-open-sheet]")) openSheet(null); });
 $("closeSheet").onclick = closeSheet; $("scrim").onclick = closeSheet;
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
 document.addEventListener("click", e => {
