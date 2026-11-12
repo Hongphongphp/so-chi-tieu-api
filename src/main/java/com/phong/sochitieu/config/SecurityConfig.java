@@ -31,7 +31,8 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Trang web (file tĩnh trong resources/static) ai cũng mở được
-                        .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
+                        .requestMatchers("/", "/index.html", "/favicon.ico", "/manifest.webmanifest",
+                                "/icon.svg", "/icon-180.png", "/icon-192.png", "/icon-512.png").permitAll()
                         .requestMatchers("/api/auth/**", "/error").permitAll()
                         .anyRequest().authenticated())
                 // Chưa đăng nhập -> 401 thay vì 403
